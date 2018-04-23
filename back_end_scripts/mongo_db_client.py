@@ -11,8 +11,6 @@ information.
 import os
 from pymongo import MongoClient, IndexModel, TEXT, DESCENDING, HASHED
 from pprint import pprint
-import secrets
-import string
 from bson.son import SON
 
 #_______________________________________________________________________________
@@ -33,7 +31,7 @@ class sport_together_db():
 	"""
 	A wrapper around the MongoDB database used for the Sport 
 	Together application.
-	
+
 	"""
 	
 	def __init__(self, collection_name):
