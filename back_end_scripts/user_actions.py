@@ -127,7 +127,6 @@ def ninja_update_user_append(new_user_info):
 
     else:
         return None
-
 class sport_together_user():
 
     def __init__(self, identifier_key_val_pair, password):
@@ -318,6 +317,53 @@ class sport_together_user():
         else:
             return None  
 
+    def add_game(self, game_info):
+        """
+        Add a game to the database of games and associate it with this
+        user.
+
+        param(s):
+        game_info (dict)    Expected keys: type, location, "time"
+
+        return(s):
+        (int) The id of the inserted game, or NoneType if the 
+        game wasn't successfully inserted into the database.
+
+        """
+
+        if self.account is None:
+            return None
+
+        for expected_key in ("type", "location", "time"):
+            if expected_key not in game_info.keys():
+                raise KeyError(
+                    "Did not find `", expected_key, "` as a key in `game_info`"
+                )
+
+        # Get a unique ID for each game. This ID should be different from database ID
+        alphabet = string.ascii_lowercase + string.digits
+        while True:
+            game_id = "".join(choice(alphabet) for i in range(10))
+            if games_db.read({"game_id": game_id}) is None:
+                break
+
+        game_info["game_id"] = game_id
+        game_info["html_version"] = game_actions.convert_game_info_to_html_row(game_info)
+
+        insert_results = games_db.create(game_info)
+
+        new_user_info = {
+            "user_id": self.account["user_id"],
+            "games_owned": game_id
+        }
+
+        self.update_user_append(new_user_info)
+
+        if insert_results.inserted_id is not None:
+            return game_id
+        else:
+            return None
+    
     def withdraw_from_game(self, game_id):
         """
         Remove the user's participation in the given game.

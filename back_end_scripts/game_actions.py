@@ -26,47 +26,8 @@ def check_mandatory_fields(game_info):
             raise KeyError(
                 "Did not find `", expected_key, "` as a key in `game_info`"
             )
-
-def add_game(game_info):
-    """
-    Add a game to the database of games.
-
-    param(s):
-    game_info (dict)    Expected keys: type, location, game_owner_id 
-
-    return(s):
-    (int) The id of the inserted game, or NoneType if the 
-    game wasn't successfully inserted into the database.
-
-    """
-
-    check_mandatory_fields(game_info)
-
-    # Get a unique ID for each game. This ID should be different from database ID
-    alphabet = string.ascii_lowercase + string.digits
-    while True:
-        game_id = "".join(choice(alphabet) for i in range(10))
-        if games_db.read({"game_id": game_id}) is None:
-            break
-
-    game_info["game_id"] = game_id
-    game_info["html_version"] = _convert_game_info_to_html_row(game_info)
     
-    insert_results = games_db.create(game_info)
-
-    new_user_info = {
-        "user_id": game_info["game_owner_id"],
-        "games_owned": game_id
-    }
-
-    user_actions.update_user_append(new_user_info)
-    
-    if insert_results.inserted_id is not None:
-        return game_id
-    else:
-        return None
-    
-def _convert_game_info_to_html_row(game_info):
+def convert_game_info_to_html_row(game_info):
     """
     Prepare a HTML-encoded version of each game for rendering.
 
@@ -124,7 +85,7 @@ def update_game_append(new_game_info):
     for key in new_game_info:
         game_to_modify[key].append(new_game_info[key])
 
-    game_to_modify["html_version"] = _convert_game_info_to_html_row(
+    game_to_modify["html_version"] = convert_game_info_to_html_row(
         game_to_modify)
     return _helper_write_changes_to_db(game_to_modify)
         
@@ -148,7 +109,7 @@ def update_game(new_game_info):
     for key in new_game_info:
         game_to_modify[key] = new_game_info[key]
     
-    game_to_modify["html_version"] = _convert_game_info_to_html_row(game_to_modify)
+    game_to_modify["html_version"] = convert_game_info_to_html_row(game_to_modify)
     return _helper_write_changes_to_db(game_to_modify)
 
 def _helper_write_changes_to_db(new_game_info):
@@ -179,7 +140,7 @@ def main():
         'location': 'Princeton University',  
         'game_owner_id': 4
     }
-    print(add_game(test_game))
+    print(test_game)
 
 if __name__ == "__main__":
     main()
