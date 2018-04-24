@@ -1,170 +1,39 @@
+"""
+user_actions.py
+
+Supports user related actions such as `is_in_db`, `get_user`,
+`get_games`, `update_user`, `update_user_append`, 
+`delete_user`, `register_user`.
+
+"""
+
 import secrets
 import string
 from random import choice
 import bcrypt
 from datetime import datetime
-
 from mongo_db_client import sport_together_db
 import game_actions
 
-"""
-Why the division between `users_db` and `login_db`?
-
-The separation is only artificial. They both exist on the same
-database. I wanted to simulate a situation where the credentials
-are stored separate from the account information.
-
-"""
 users_db = sport_together_db("sport_together_user_account_info")
-login_db = sport_together_db("sport_together_user_logins")
+games_db = sport_together_db("sport_together_game_details")
 
-def is_in_db(key_val_pair, collection_to_use="login_db"):
+# Instance variables for authentication purposes with bcrypt
+desired_key_bytes = 32
+salt_rounds = 12
+pbkdf_rounds = 100
+
+def is_in_db(key_val_pair):
     """
     @param `key_val_pair` (JSON): A key-value pair that might be
     associated with an account in the database.
 
     @return `True` if the key-value pair exists in the database.
     """
-    if collection_to_use == "login_db":
-        if login_db.read(key_val_pair) is not None:
-            return True 
-        else:
-            return False
+    if users_db.read(key_val_pair) is not None:
+        return True
     else:
-        if users_db.read(key_val_pair) is not None:
-            return True
-        else:
-            return False
-
-def get_user(key_val_pairs):
-    """
-    Fetch the account information for the user associated with
-    the `key_val_pairs`.
-
-    @param `key_val_pair` (JSON): A key-value pair that might be
-    associated with an account in the database.
-
-    @return (JSON): The user's account information
-    """
-    user_info = users_db.read(key_val_pairs)
-    user_info.pop("_id", None)
-    return user_info
-
-def get_games(user_id):
-    """
-    Fetch all the games that the user has created or joined.
-
-    @param `user_id` (String): The ID of the user.
-
-    @returns: (JSON): Contains the keys `games_owned` and
-    `games_joined`.
-
-    """
-    user_profile = users_db.read({"user_id": user_id})
-    
-    if user_profile is None:
-        return {
-            "games_owned": None, "games_joined": None
-        }
-    
-    games = {}
-    games["games_owned"] = user_profile["games_owned"]
-    games["games_joined"] = user_profile["games_joined"]
-    
-    return games
-
-def update_user_append(new_user_info):
-    """
-    Append new information to existing information on the user's
-    profile.
-
-    @param `new_user_info` (JSON): A JSON object with the info to
-    be appended. `user_id` must be one of the keys in the JSON
-
-    @return (JSON): Contains the key `user_info` that is `None`
-    only if the update wasn't successful.
-
-    """
-    assert "user_id" in new_user_info, "`user_id` should have been specified"
-
-    user_to_modify = users_db.read(
-        {
-            "user_id": new_user_info.pop("user_id", None)
-        }
-    )
-    
-    for key in new_user_info:
-        # This is an inplace function!
-        try:
-            user_to_modify[key].append(new_user_info[key])
-        except KeyError:
-            user_to_modify[key] = [new_user_info[key]]
-
-    return update_user(user_to_modify)
-
-def update_user(new_user_info):
-    """
-    Overwrite the information in the user account.
-
-    @param `new_user_info` (JSON): A JSON object with the info to
-    be appended. `user_id` must be one of the keys in the JSON
-
-    @return (JSON): Contains the key `user_info` that is `None`
-    only if the update wasn't successful.
-
-    @warning: This method overwrites existing fields. Use 
-    `user_actions.update_user_append(new_user_info)` if you wish
-    to append.
-
-    """
-    assert "user_id" in new_user_info, "`user_id` should have been specified"
-
-    update_results = {}
-    result = users_db.update(
-        {
-            "user_id": new_user_info["user_id"]
-        }, new_user_info
-    )
-    if result.modified_count == 1:
-        update_results["user_info"] = new_user_info
-    else:
-        update_results["user_info"] = None
-            
-    return update_results    
-
-def delete_user(user_id):
-    """
-    Delete the user's account from Sport Together.
-
-    @param `key_val_pair` (JSON): A key-value pair that might be
-    associated with an account in the database.
-
-    """
-    login_db.delete({"user_id": user_id})
-    user_account_info = users_db.delete({"user_id": user_id})
-
-    if user_account_info is None:
-        return None
-
-    for game_id in user_account_info["games_joined"]:
-        game_actions.remove_user_from_game(game_id, user_id)
-
-    for game_id in user_account_info["games_owned"]:
-        game_actions.remove_user_from_game(game_id, user_id)
-
-    return True
-
-def check_mandatory_fields(user_info):
-    """
-    @raises `KeyError` exception if `user_info` doesn't have
-    enough information to create a new user account.
-
-    """
-    for expected_key in ("email_address", "password"):
-        if expected_key not in user_info.keys():
-            raise KeyError(
-                "Did not find `", expected_key, "` as a key in `game_info`"
-            )
+        return False
 
 def register_user(new_user_info):
     """
@@ -176,7 +45,11 @@ def register_user(new_user_info):
     @returns (JSON): Expected keys: `success`, `message`.
 
     """
-    check_mandatory_fields(new_user_info)
+    for expected_key in ("email_address", "password"):
+        if expected_key not in new_user_info.keys():
+            raise KeyError(
+                "Did not find `", expected_key, "` as a key in `game_info`"
+            )
 
     # We won't allow accounts that have more than one email address
     if is_in_db({"email_address": new_user_info["email_address"]}):
@@ -200,24 +73,19 @@ def register_user(new_user_info):
     salt = bcrypt.gensalt(rounds=12)
     hashed_pw = bcrypt.kdf(
         password=new_user_info["password"].encode(),
-        salt=salt, desired_key_bytes=32, rounds=100
+        salt=salt, desired_key_bytes=desired_key_bytes, rounds=pbkdf_rounds
     )
     validation_url = secrets.token_urlsafe(32)
 
-    insert_results_login = login_db.create({
+    insert_results = users_db.create({
         "email_address": new_user_info["email_address"],
         "username": username, "salt": salt, "hash": hashed_pw,
         "validation_url": validation_url, "already_validated": False,
-        "signup_time": datetime.today().timestamp() 
-    })
-
-    assert insert_results_login.inserted_id is not None, "Failed to insert login details into the database"
-
-    insert_results = users_db.create({
+        "signup_time": datetime.today().timestamp(),
         "user_id": new_user_id, "games_joined": [],
         "games_owned": [], "orphaned_games": []
     })
-    
+
     if insert_results.inserted_id is not None:
         return {
             "success": True, "message": new_user_id
@@ -226,7 +94,259 @@ def register_user(new_user_info):
         return {
             "success": False, "message": "Something went wrong on our end. Try again later."
         }
+
+def ninja_update_user_append(new_user_info):
+    """
+    Some updates don't require signing in and authenticating a user.
+
+    """
+    assert "user_id" in new_user_info, "`user_id` should have been specified"
     
+    allowed_fields = {"orphaned_games", "already_validated"}
+
+    user_id = new_user_info.pop("user_id")
+    user_account_info = users_db.read({"user_id": user_id})
+
+    for key in new_user_info:
+        if key not in allowed_fields:
+            return None
+        try:
+            user_account_info[key].append(new_user_info[key])
+
+        except KeyError:
+            user_account_info[key] = [new_user_info[key]]
+
+        new_user_info[key] = user_account_info[key]
+
+    update_result = users_db.update(
+        {"user_id": user_id}, new_user_info
+    )
+
+    if update_result.modified_count == 1:
+        return True
+
+    else:
+        return None
+
+class sport_together_user():
+
+    def __init__(self, identifier_key_val_pair, password):
+        """
+        Get the account associated with the specified unique identifier.
+
+        @param `identifier_key_val_pair` (JSON): A key value pair associated
+        with only one account. Expects either `email_address` or `username` as
+        the key.
+
+        @param `password` (str): The password associated with the account.
+
+        """
+        
+        self.identifier_key_val_pair = identifier_key_val_pair
+        self.account = self._authenticate_user(password)
+    
+    def _authenticate_user(self, password):
+        """
+        Authenticate a user who is trying to log in.
+
+        @param `submitted_credentials` (JSON): Expected keys: 
+        `email_address_or_username`, `password`.
+
+        @return (bool): (JSON) if user was successfully authenticated,
+        `NoneType` otherwise.
+
+        """
+        account_info = users_db.read(self.identifier_key_val_pair)
+        if account_info is None or len(account_info) != 1:
+            return None
+
+        calaculated_hash = bcrypt.kdf(
+            password=password.encode(), rounds=pbkdf_rounds,
+            salt=account_info["salt"], desired_key_bytes=desired_key_bytes
+        )
+
+        if calaculated_hash == account_info["hash"]:
+            return account_info
+        else:
+            return None
+
+    def _refresh(self):
+        """
+        Reload the user account details from the database.
+
+        """
+        if self.account == None:
+            return None
+
+        self.account = users_db.read(self.identifier_key_val_pair)
+
+    def get_games(self):
+        """
+        Fetch all the games that the user has created or joined.
+
+        @param `user_id` (String): The ID of the user.
+
+        @returns: (JSON): Contains the keys `games_owned` and
+        `games_joined`.
+
+        """
+        
+        if self.account is None:
+            return {
+                "games_owned": None, "games_joined": None
+            }
+        
+        return {
+            "games_owned": self.account["games_owned"],
+            "games_joined": self.account["games_joined"]
+        }
+
+    def _return_user_info(self, keys_to_use=None):
+        """
+        Return relevant account information. 
+
+        @param `keys_to_use` (Iterable): The keys (and their associated
+        values) that need to be returned. Useful for trimming the amount 
+        of information sent back and forth.
+
+        @return (JSON) if successful, `None` if unsuccessful.
+
+        """
+
+        if self.account is None:
+            return None
+
+        if keys_to_use == None:
+            keys_to_use = [
+                "user_id", "games_joined", "games_owned", "orphaned_games"
+            ]
+        
+        user_info_payload = {}
+        for key in keys_to_use:
+            user_info_payload[key] = self.account[key]
+
+        return user_info_payload
+
+    def delete_user(self):
+        """
+        Delete the user's account from Sport Together.
+
+        @returns (bool): `True` if the user's account was deleted, 
+        `False` otherwise
+
+        """
+        if self.account is None:
+            return False
+
+        for game_id in self.account["games_joined"]:
+            self.withdraw_from_game(game_id)
+
+        for game_id in self.account["games_owned"]:
+            self.withdraw_from_game(game_id)
+        
+        delete_result = users_db.delete(self.identifier_key_val_pair)
+
+        if delete_result["user_id"] == self.account["user_id"]:
+            self._refresh()
+            return True
+        else:
+            return False
+
+    def update_user_append(self, new_user_info):
+        """
+        Append new information to existing information on the user's
+        profile.
+
+        @param `new_user_info` (JSON): A JSON object with the info to
+        be appended. `user_id` must be one of the keys in the JSON
+
+        @return (JSON): Contains the key `user_info` that is `None`
+        only if the update wasn't successful.
+
+        """
+        assert "user_id" in new_user_info, "`user_id` should have been specified"
+        assert new_user_info["user_id"] == self.account["user_id"]
+        
+        new_user_info.pop("user_id")
+
+        for key in new_user_info:
+            # This is an inplace function!
+            try:
+                self.account[key].append(new_user_info[key])
+
+            except KeyError:
+                self.account[key] = [new_user_info[key]]
+
+            new_user_info[key] = self.account[key]
+
+        update_result = users_db.update(
+            self.identifier_key_val_pair, new_user_info
+        )
+
+        if update_result.modified_count == 1:
+            self._refresh()
+            return self._return_user_info()
+
+        else:
+            return None
+
+    def update_user(self, new_user_info):
+        """
+        Overwrite the information in the user account.
+
+        @param `new_user_info` (JSON): A JSON object with the info to
+        be appended. `user_id` must be one of the keys in the JSON
+
+        @return (JSON): Contains the key `user_info` that is `None`
+        only if the update wasn't successful.
+
+        @warning: This method overwrites existing fields. Use 
+        `user_actions.update_user_append(new_user_info)` if you wish
+        to append.
+
+        """
+        assert "user_id" in new_user_info, "`user_id` should have been specified"
+        assert new_user_info["user_id"] == self.account["user_id"]
+
+        new_user_info.pop("user_id")
+        result = users_db.update(
+            self.identifier_key_val_pair, new_user_info
+        )
+        if result.modified_count == 1:
+            self._refresh()
+            return self._return_user_info()
+        else:
+            return None  
+
+    def withdraw_from_game(self, game_id):
+        """
+        Remove the user's participation in the given game.
+
+        @param `game_id` (str): The ID of the game.
+
+        @param `user_id` (str): The ID of the user.
+
+        """
+        game_to_modify = games_db.read({"game_id": game_id})
+
+        if game_to_modify is None:
+            return False
+
+        user_id = self.account["user_id"]
+        if user_id in game_to_modify["game_attendees"]:
+            game_to_modify["game_attendees"].remove(user_id)
+
+        if user_id == game_to_modify["game_owner_id"]:
+            game_to_modify["game_owner_id"] = ""
+
+            for affected_user_id in game_to_modify["game_attendees"]:
+                ninja_update_user_append({
+                    "user_id": affected_user_id,
+                    "orphaned_games": game_id
+                })
+
+        return True
+
 def main():
     new_user = {
         "username": "c13u",

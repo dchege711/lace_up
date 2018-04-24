@@ -1,3 +1,11 @@
+"""
+game_actions.py
+
+Supports game related actions such as `add_game`, `get_games`,
+`update_game_append`, `update_game`, `remove_user_from_game`.
+
+"""
+
 import secrets
 import string
 from random import choice
@@ -164,34 +172,6 @@ def _helper_write_changes_to_db(new_game_info):
         update_results["game_info"] = False
 
     return update_results
-
-def remove_user_from_game(game_id, user_id):
-    """
-    Remove the user's participation in the given game.
-
-    @param `game_id` (str): The ID of the game.
-
-    @param `user_id` (str): The ID of the user.
-
-    """
-    game_to_modify = games_db.read({"game_id": game_id})
-
-    if game_to_modify is None:
-        return False
-
-    if user_id in game_to_modify["game_attendees"]:
-        game_to_modify["game_attendees"].remove(user_id)
-
-    if user_id == game_to_modify["game_owner_id"]:
-        game_to_modify["game_owner_id"] = ""
-
-        for affected_user_id in game_to_modify["game_attendees"]:
-            user_actions.update_user_append({
-                "user_id": affected_user_id,
-                "orphaned_games": game_id
-            })
-    
-    return True
 
 def main():    
     test_game = {

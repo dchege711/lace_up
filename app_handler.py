@@ -3,10 +3,11 @@ from flask_cors import CORS
 import os
 from pprint import pprint
 
-import filter_trips
-from mongo_db_client import tiger_rides_db
+import sys
+sys.path.insert(0, "./back_end_scripts/")
+from mongo_db_client import sport_together_db
 import user_actions
-import trip_actions
+import game_actions
 
 app = Flask(__name__)
 CORS(app)   # Allow Cross-Origin-Resource-Sharing on all methods
@@ -29,7 +30,7 @@ def index():
 @app.route('/static/img/logo/logo_cropped.png', methods=["GET"])
 def get_logo():
     """
-    Returns the Tiger Rides logo. I'm planning on deprecating this and using the 
+    Returns the Sport Together logo. I'm planning on deprecating this and using the 
     app_files dictionary in an app.route() that catches all mismatches.
     
     """
@@ -43,43 +44,6 @@ def return_navbar():
     
     """
     return render_template("navigation.html")
-
-@app.route('/search/', methods=['POST'])
-def search_trips():
-    """
-    Searching for trips on the /search/ url returns all the trips being made.
-    There's no need for password authentication for this (yet?)
-    
-    """
-    if request.method == 'POST':
-        state = request.get_json()["origin_state"]        
-        list_of_attendees = filter_trips.get_travellers_from_state(state)
-                
-        results_in_html = """
-        <div class='w3-responsive'><table class='w3-table-all'>
-            <tr>
-                <th>Name</th><th>Number of People Coming</th>
-                <th>City</th><th>State</th>
-            </tr>
-        """
-        for result in list_of_attendees:
-            results_in_html = "".join([results_in_html, tiger_cards(result)])
-            
-        results_in_html = "".join([results_in_html, "</table></div>"])
-        
-        return jsonify(results_in_html)
-
-def tiger_cards(attendee_details):
-    """
-    Create a pretty row for a html table that will contain the trips being made.
-    
-    """
-    return ''.join([
-        "<tr><td>", attendee_details["name"], "</td>",
-        "<td>", attendee_details["size"], "</td>",
-        "<td>", attendee_details["city"], "</td>",
-        "<td>", attendee_details["state_abbr"], "</td>", "</tr>"
-    ])
     
 @app.route('/register/', methods=["POST", "GET"])
 def register_new_users():
@@ -90,7 +54,6 @@ def register_new_users():
         """
         return render_template("new_member_registration.html")
     
-    
     elif request.method == "POST":
         """
         Process the information that was entered on the registration form.
@@ -99,14 +62,16 @@ def register_new_users():
         """
         payload = request.get_json()
         
-        found_duplicate = user_actions.is_in_db({"email_address": payload["email_address"]})
+        found_duplicate = user_actions.is_in_db({
+            "email_address": payload["email_address"]
+        })
         if (found_duplicate):
             return jsonify({
                 "registration_status": False,
                 "registration_message": "That email address has already been taken."
             })
         
-        successfully_registered_user = user_actions.register_user(payload)[0]
+        successfully_registered_user = user_actions.register_user(payload)["success"]
         if successfully_registered_user:
             return jsonify({
                 "registration_status": True,
@@ -205,7 +170,7 @@ def update_trip():
 
 @app.errorhandler(404)
 def notFoundError(error):
-    return "Page Not Found (︶︹︺)", 404
+    return "Page Not Found", 404
 
 #_______________________________________________________________________________
 

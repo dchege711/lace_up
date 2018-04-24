@@ -17,10 +17,8 @@ from bson.son import SON
 
 indexes = {
 	"sport_together_user_account_info": [
-		("user_id", HASHED), ("location", TEXT)
-	],
-	"sport_together_user_logins": [
-		("email", HASHED), ("salt", TEXT)
+		("user_id", HASHED), ("location", TEXT),
+		("email", TEXT), ("salt", TEXT)
 	],
 	"sport_together_game_details": [
 		("location", TEXT), ("time", DESCENDING)
