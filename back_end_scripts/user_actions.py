@@ -85,6 +85,8 @@ def register_user(new_user_info):
 
     new_user_account_info = {
         "email_address": new_user_info["email_address"],
+        "first_name": new_user_info["first_name"], 
+        "last_name": new_user_info["last_name"],
         "username": username, "salt": salt, "hash": hashed_pw,
         "validation_url": validation_url, "already_validated": False,
         "signup_time": datetime.today().timestamp(),
