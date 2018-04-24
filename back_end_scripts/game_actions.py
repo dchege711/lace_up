@@ -96,7 +96,6 @@ def get_games(game_ids):
             relevant_games.append(game)
     return relevant_games
 
-
 def update_game_append(new_game_info):
     """
     Update specific fields in the game object. Useful when adding participants
@@ -143,7 +142,6 @@ def update_game(new_game_info):
     
     game_to_modify["html_version"] = _convert_game_info_to_html_row(game_to_modify)
     return _helper_write_changes_to_db(game_to_modify)
-    
 
 def _helper_write_changes_to_db(new_game_info):
     """
@@ -166,6 +164,34 @@ def _helper_write_changes_to_db(new_game_info):
         update_results["game_info"] = False
 
     return update_results
+
+def remove_user_from_game(game_id, user_id):
+    """
+    Remove the user's participation in the given game.
+
+    @param `game_id` (str): The ID of the game.
+
+    @param `user_id` (str): The ID of the user.
+
+    """
+    game_to_modify = games_db.read({"game_id": game_id})
+
+    if game_to_modify is None:
+        return False
+
+    if user_id in game_to_modify["game_attendees"]:
+        game_to_modify["game_attendees"].remove(user_id)
+
+    if user_id == game_to_modify["game_owner_id"]:
+        game_to_modify["game_owner_id"] = ""
+
+        for affected_user_id in game_to_modify["game_attendees"]:
+            user_actions.update_user_append({
+                "user_id": affected_user_id,
+                "orphaned_games": game_id
+            })
+    
+    return True
 
 def main():    
     test_game = {

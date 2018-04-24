@@ -57,7 +57,7 @@ class sport_together_db():
 		return self.collection.find_one(filter=query)
 	
 	def delete(self, query_filter):
-		return self.collection.delete_one(query_filter)
+		return self.collection.find_one_and_delete(query_filter)
 		
 def main():
 	user_logins_db = sport_together_db("sport_together_user_logins")
