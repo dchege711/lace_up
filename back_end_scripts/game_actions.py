@@ -8,6 +8,11 @@ import user_actions
 games_db = sport_together_db("sport_together_game_details")
 
 def check_mandatory_fields(game_info):
+    """
+    @raises `KeyError` exception if `game_info` doesn't have
+    enough information to create a game.
+
+    """
     for expected_key in ("type", "location", "game_owner_id"):
         if expected_key not in game_info.keys():
             raise KeyError(
@@ -166,11 +171,9 @@ def main():
     test_game = {
         'type': 'soccer', 
         'location': 'Princeton University',  
-        'game_id': 4
+        'game_owner_id': 4
     }
-    # print(_convert_game_info_to_html_row(test_game))
-    test_game["seats_available"] = 11
-    print(update_game(test_game))
+    print(add_game(test_game))
 
 if __name__ == "__main__":
     main()
