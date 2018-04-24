@@ -67,13 +67,13 @@ def register_new_users():
         successfully_registered_user = user_actions.register_user(payload)["success"]
         if successfully_registered_user:
             return jsonify({
-                "registration_status": True,
-                "registration_message": "Successful registration. Now log in with your email address and password"
+                "success": True,
+                "message": "Successful registration. Now log in with your email address and password"
             })
         else:
             return jsonify({
-                "registration_status": False,
-                "registration_message": "Unsuccessful registration. Please try again after a few minutes."
+                "success": False,
+                "message": "Unsuccessful registration. Please try again after a few minutes."
             })
             
 @app.route('/login/', methods=["GET", "POST"])
@@ -99,6 +99,7 @@ def handle_login():
         })
         
         if not account_exists:
+            print("Account doesn't exist.")
             return jsonify({
                 "success": False,
                 "message": "Incorrect email or password"
@@ -111,6 +112,7 @@ def handle_login():
                 }, payload["password"])
 
             if fetch_account.account is None:
+                print("Wrong password submitted.")
                 return jsonify({
                     "success": False,
                     "message": "Incorrect email or password"
@@ -175,6 +177,6 @@ def notFoundError(error):
 #_______________________________________________________________________________
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 #_______________________________________________________________________________

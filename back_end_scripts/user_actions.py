@@ -151,7 +151,6 @@ class sport_together_user():
         @param `password` (str): The password associated with the account.
 
         """
-        
         self.identifier_key_val_pair = identifier_key_val_pair
         self.account = self._authenticate_user(password)
     
@@ -167,15 +166,19 @@ class sport_together_user():
 
         """
         account_info = users_db.read(self.identifier_key_val_pair)
-        if account_info is None or len(account_info) != 1:
+
+        if account_info is None:
             return None
 
-        calaculated_hash = bcrypt.kdf(
+        calculated_hash = bcrypt.kdf(
             password=password.encode(), rounds=pbkdf_rounds,
             salt=account_info["salt"], desired_key_bytes=desired_key_bytes
         )
 
-        if calaculated_hash == account_info["hash"]:
+        print(calculated_hash)
+        print(account_info["hash"])
+
+        if calculated_hash == account_info["hash"]:
             return account_info
         else:
             return None

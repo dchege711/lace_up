@@ -96,7 +96,7 @@
             <p class="w3-center">
                 CSS provided by <a href="https://www.w3schools.com/w3css/">W3 CSS</a><br>
                 Logo made with <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo</a><br>
-                &#169; Chege Gitau & Komron Shayegan, 2018
+                &#169; Chege Gitau, Komron Shayegan, 2018
             </p>
         </footer>
         
@@ -163,10 +163,11 @@
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         var results = JSON.parse(this.responseText);
-                        if (results["login_successful"] == true) {
-                            loadUserDetails(results["login_payload"]);
+                        console.log(results);
+                        if (results["success"] == true) {
+                            loadUserDetails(results["message"]);
                         } else {
-                            alert(results["login_payload"]);
+                            alert(results["message"]);
                         }
                     }
                 
