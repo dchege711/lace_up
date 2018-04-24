@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <base href="/">
@@ -9,18 +10,28 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Tiger Rides</title>
+    <script src="./static/ProcessForm.js"></script>
+    <title>Sport Together Registration Page</title>
     <style>
-        body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-        .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
-        .fa-anchor,.fa-coffee {font-size:200px}
+        body,h1,h2,h3,h4,h5,h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,h1,button {
+            font-family: "Montserrat", sans-serif
+        }
+
+        .fa-anchor,.fa-coffee {
+            font-size: 200px
+        }
+
         body {
             display: flex;
             min-height: 100vh;
-            flex-direction: column; 
-            background-color: #E0E0E0;         
+            flex-direction: column;
+            background-color: #E0E0E0;
         }
-        
+
         form {
             border-radius: 5px;
             background-color: white;
@@ -29,20 +40,20 @@
             max-width: 80%;
             padding: 25px;
         }
-        
+
         #tiger_rides_body {
             flex: 1
         }
     </style>
     <script>
         // Resize elements that should have matching heights
-        $(document).ready(function(){
-            $(window).resize(function(){
+        $(document).ready(function () {
+            $(window).resize(function () {
                 var height = $("#navigation-placeholder").height();
                 $("#dummy_padded_div").height(height);
-            });    
+            });
         });
-        
+
     </script>
 </head>
 
@@ -53,17 +64,17 @@
     <div id="navigation-placeholder"></div>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script>
-        $(function(){
+        $(function () {
             $("#navigation-placeholder").load("./navigation.html");
         });
     </script>
 
     <!-- End of Navigation Bar -->
-    
+
     <!-- Main part of the Tiger Riges Application UI -->
-    
+
     <div class="w3-container w3-padding-large" id="tiger_rides_body">
-    
+
         <!-- Padded element to make sure that the navigation bar never covers
         the first element that has text. See the script in the header for info -->
         <div class="w3-container" id="dummy_padded_div" style="height: 50px"></div>
@@ -71,112 +82,130 @@
         <!-- Present a Registration Form-->
         <div class="w3-container w3-padding-large">
             <div class="w3-container w3-padding-large" id="registration_form_holder">
-                
-                <h5>Glad to have you join us!<br></h5>
-                                
-                <form id="registration_form">
-                    
-                    <p><strong>Please fill out the following fields:</strong></p>
-                    
-                    <label for="first_name"> First Name:</label>
-                    <input class="w3-input" type="text" name="first_name" required/>
+
+                <h5>Thanks for joining us! Please provide us with the following information:
+                    <br>
+                </h5>
+
+                <form id="registration_form" method="post" onsubmit="return handleRegistrationForm()">
+
+                    <label for="university"> University: </label>
+                    <br/>
+                    <select class="w3-input" name="university" id="university" />
+                    <option value="null"></option>
+                    <option value="Princeton">Princeton</option>
+                    <option value="Columbia">Columbia</option>
+                    <option value="Yale">Yale</option>
+                    <option value="Harvard">Harvard</option>
+                    <option value="Dartmouth">Dartmouth</option>
+                    <option value="Brown">Brown</option>
+                    <option value="Penn">Penn</option>
+                    <option value="Cornell">Cornell</option>
+                    </select>
                     <br />
-                    
-                    <label for="last_name"> Last Name: </label>
-                    <input class="w3-input" type="text" name="last_name"required/>
-                    <br />
-                    
-                    <label for="email_address"> Email: </label>
-                    <input class="w3-input" type="email" name ="email_address" required/>
-                    <br />
-                    
-                    <label for="password"> Password: </label>
-                    <input class="w3-input" type="password" name="password" minlength="8" required/>
                     <br />
 
-                    <p><strong>Please enter your trip information:</strong></p>
-                    
-                    <label for="origin">Origin:</label>
-                    <input class="w3-input" type="text" name="origin" />
+                    <label for="first_name"> First Name (Required): </label>
+                    <input class="w3-input" type="text" name="first_name" id="first_name" />
                     <br />
-                    
-                    <label for="destination">Destination:</label>
-                    <input class="w3-input" type="text" name="destination" value="Princeton University" />
-                    <br />
-                    
-                    <label for="departure_date">Departure Date:</label>
-                    <input class="w3-input" type="date" name="departure_date" />
-                    <br />
-                    
-                    <label for="departure_time">Departure Time:</label>
-                    <input class="w3-input" type="time" name="departure_time" />
 
-                    <p>If you have a car, how many seats can you offer?</p>
-                    <input class="w3-input" type="number" name="seats_available" min="0"/>
+                    <label for="last_name"> Last Name (Required): </label>
+                    <input class="w3-input" type="text" name="last_name" id="last_name" />
                     <br />
-                
-                    <button class="w3-button w3-green" type="submit" onclick="return registerNewMember()">Register</button>
-                    
+
+                    <label for="email_address"> Email (Required): </label>
+                    <input class="w3-input" type="text" name="email_address" id="email_address" />
+                    <br />
+
+                    <label for="password"> Password (Required): </label>
+                    <input class="w3-input" type="password" name="password" id="password" minlength="8" />
+                    <br />
+
+                    <p>
+                        <strong>Please select every sport that you play.</strong>
+                    </p>
+
+                    Soccer:
+                    <select class="w3-input" name="soccer" id="soccer" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                    </select>
+                    <br /> Frisbee:
+                    <select class="w3-input" name="frisbee" id="frisbee" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                    </select>
+                    <br /> Tennis:
+                    <select class="w3-input" name="tennis" id="tennis" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                    </select>
+                    <br /> Basketball:
+                    <select class="w3-input" name="basketball" id="basketball" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                    </select>
+                    <br /> Running:
+                    <select class="w3-input" name="running" id="running" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                    </select>
+                    <br />
+
+                    <p>Would you like to receive push notifications of games happening nearby?</p>
+                    Yes:
+                    <input class="w3-input" type="checkbox" name="yes" id="yes_notifications" />
+                    <br /> No:
+                    <input class="w3-input" type="checkbox" name="no" id="no_notifications" />
+                    <br />
+                    <br />
+-->
+                    <button class="w3-button w3-green" type="submit">Register</button>
+
                 </form>
-                
+
             </div>
-            
-            <!-- Process the search query -->
+
             <script>
-                function registerNewMember() {
-                    var form = document.getElementById("registration_form");
-                    if (form.reportValidity() === false) {
-                        alert("Please fill out the required fields");
-                        return;
-                    }
-                    
-                    var elements = form.elements;
-                    var payload = {};
-                    
-                    for (var i = 0; i < elements.length; i++) {
-                        payload[elements[i].name] = elements[i].value;
-                    }
-                    delete payload[""];
-                    
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            var results = JSON.parse(this.responseText);
-                            if (results["registration_status"] == true) {
-                                alert("Successful registration. Now log in with your email address and password");
-                                window.location = "/login";
-                            } else {
-                                alert(results["registration_message"]);
-                                // window.location = "/register";
-                            }
-                        }
-                    
-                    }
-                    xhttp.open("POST", "/register/", true);
-                    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                    xhttp.send(JSON.stringify(payload));
-                    
-                    // https://stackoverflow.com/questions/7393484/xmlhttprequest-asynchronous-not-working-always-returns-status-0
+                function handleRegistrationForm() {
+                    processForm('registration_form', '/register/', function (results) {
+                        console.log(results);
+                        alert(results["message"]);
+                        if (results["success"] === true) window.location = "/login"
+                    });
                     return false;
                 }
             </script>
+
         </div>
-        
+
         <!-- End of Second Grid-->
-    
+
     </div>
-    
+
     <!-- End of Tiger Rides UI -->
-    
+
     <!-- Footer style -->
     <footer class="w3-row-padding w3-padding-small w3-container w3-black">
         <p class="w3-center">
-            CSS provided by <a href="https://www.w3schools.com/w3css/">W3 CSS</a><br>
-            Logo made with <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo</a><br>
-            &#169; Chege Gitau & Komron Shayegan, 2018
+            CSS provided by
+            <a href="https://www.w3schools.com/w3css/">W3 CSS</a>
+            <br> Logo made with
+            <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo</a>
+            <br> &#169; Chege Gitau, Komron Shayegan, 2018
         </p>
     </footer>
-    
+
     <!-- End of Footer -->
 
 </body>
