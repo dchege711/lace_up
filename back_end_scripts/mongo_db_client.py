@@ -60,18 +60,8 @@ class sport_together_db():
 		return self.collection.delete_one(query_filter)
 		
 def main():
-	sport_together = sport_together_db("user_account_info")
-	# tiger_rides._initialize()
-	# tiger_rides.create({
-	# 	"email": "nothing@gmail.com",
-	# 	"first_name": "Kaboom",
-	# 	"last_name": "Psyche",
-	# 	"origin": "Nashville",
-	# 	"leaving_date": "01-01-2018",
-	# 	"leaving_time": "12:34PM",
-	# 	"has_car": "no",
-	# 	"password": "lets_save_passwords_in_plain_text"
-	# })
+	user_logins_db = sport_together_db("sport_together_user_logins")
+	print(user_logins_db.read({}))
 
 if __name__ == "__main__":
 	main()

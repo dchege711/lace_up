@@ -164,11 +164,8 @@ def _helper_write_changes_to_db(new_game_info):
 
 def main():    
     test_game = {
-        'origin': 'Las Vegas', 
-        'destination': 'Princeton University', 
-        'departure_date': '2018-03-15', 
-        'departure_time': '14:00', 
-        'seats_available': '0', 
+        'type': 'soccer', 
+        'location': 'Princeton University',  
         'game_id': 4
     }
     # print(_convert_game_info_to_html_row(test_game))
