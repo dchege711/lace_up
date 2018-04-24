@@ -45,8 +45,14 @@ def register_user(new_user_info):
     @returns (JSON): Expected keys: `success`, `message`.
 
     """
-    for expected_key in ("email_address", "password"):
-        if expected_key not in new_user_info.keys():
+
+    submitted_keys = set(new_user_info.keys())
+    mandatory_keys = set(game_actions.supported_games)
+    for key in ("email_address", "password", "first_name", "last_name"):
+        mandatory_keys.add(key)
+
+    for expected_key in mandatory_keys:
+        if expected_key not in submitted_keys:
             raise KeyError(
                 "Did not find `", expected_key, "` as a key in `game_info`"
             )
@@ -54,8 +60,8 @@ def register_user(new_user_info):
     # We won't allow accounts that have more than one email address
     if is_in_db({"email_address": new_user_info["email_address"]}):
         return {
-            "success": False,
-            "message": "This email is already taken"
+            "registration_status": False,
+            "registration_message": "That email address has already been taken."
         }
 
     # Get a unique ID for each user. This ID should be different from database ID
@@ -77,14 +83,19 @@ def register_user(new_user_info):
     )
     validation_url = secrets.token_urlsafe(32)
 
-    insert_results = users_db.create({
+    new_user_account_info = {
         "email_address": new_user_info["email_address"],
         "username": username, "salt": salt, "hash": hashed_pw,
         "validation_url": validation_url, "already_validated": False,
         "signup_time": datetime.today().timestamp(),
         "user_id": new_user_id, "games_joined": [],
         "games_owned": [], "orphaned_games": []
-    })
+    }
+
+    for supported_game in game_actions.supported_games:
+        new_user_account_info[supported_game] = new_user_info[supported_game]
+
+    insert_results = users_db.create(new_user_account_info)
 
     if insert_results.inserted_id is not None:
         return {
@@ -92,7 +103,7 @@ def register_user(new_user_info):
         }
     else:
         return {
-            "success": False, "message": "Something went wrong on our end. Try again later."
+            "success": False, "message": "500 Server Error."
         }
 
 def ninja_update_user_append(new_user_info):

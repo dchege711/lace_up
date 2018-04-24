@@ -14,6 +14,9 @@ from mongo_db_client import sport_together_db
 import user_actions
 
 games_db = sport_together_db("sport_together_game_details")
+supported_games = {
+    "tennis", "frisbee", "soccer", "running", "basketball"
+}
 
 def check_mandatory_fields(game_info):
     """

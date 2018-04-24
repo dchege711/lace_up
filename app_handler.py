@@ -62,15 +62,6 @@ def register_new_users():
         """
         payload = request.get_json()
         
-        found_duplicate = user_actions.is_in_db({
-            "email_address": payload["email_address"]
-        })
-        if (found_duplicate):
-            return jsonify({
-                "registration_status": False,
-                "registration_message": "That email address has already been taken."
-            })
-        
         successfully_registered_user = user_actions.register_user(payload)["success"]
         if successfully_registered_user:
             return jsonify({
