@@ -211,7 +211,7 @@ class sport_together_user():
             "games_joined": self.account["games_joined"]
         }
 
-    def _return_user_info(self, keys_to_use=None):
+    def return_user_info(self, keys_to_use=None):
         """
         Return relevant account information. 
 
@@ -295,7 +295,7 @@ class sport_together_user():
 
         if update_result.modified_count == 1:
             self._refresh()
-            return self._return_user_info()
+            return self.return_user_info()
 
         else:
             return None
@@ -324,7 +324,7 @@ class sport_together_user():
         )
         if result.modified_count == 1:
             self._refresh()
-            return self._return_user_info()
+            return self.return_user_info()
         else:
             return None  
 

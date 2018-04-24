@@ -94,26 +94,33 @@ def handle_login():
         """
         
         payload = request.get_json()
-        account = user_actions.get_user({
-            "email_address": payload["email_address"],
-            "password": payload["password"]
+        account_exists = user_actions.is_in_db({
+            "email_address": payload["email_address"]
         })
         
-        if account is None:
+        if not account_exists:
             return jsonify({
-                "login_successful": False,
-                "login_payload": "Incorrect email or password"
+                "success": False,
+                "message": "Incorrect email or password"
             })
             
         else:
-            return jsonify({
-                "login_successful": True,
-                "login_payload": {
-                    "first_name": account["first_name"],
-                    "trips_owned": account["trips_owned"],
-                    "trips_joined": account["trips_owned"]
-                }
-            })
+            fetch_account = user_actions.sport_together_user(
+                {
+                    "email_address": payload["email_address"]
+                }, payload["password"])
+
+            if fetch_account.account is None:
+                return jsonify({
+                    "success": False,
+                    "message": "Incorrect email or password"
+                })
+            
+            else:
+                return jsonify({
+                    "success": True,
+                    "message": fetch_account.return_user_info()
+                })
             
 @app.route('/read_trips/', methods=["POST"])
 def read_trips():
