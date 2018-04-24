@@ -21,6 +21,9 @@ CORS(app)   # Allow Cross-Origin-Resource-Sharing on all methods
 
 #_______________________________________________________________________________
 
+# Global variables
+current_user_account = None
+
 @app.route('/')
 def index():
     """
@@ -46,6 +49,14 @@ def return_navbar():
     
     """
     return render_template("navigation.html")
+
+@app.route('/footer.html')
+def return_footer():
+    """
+    Returns the Page Footer. 
+    
+    """
+    return render_template("footer.html")
     
 @app.route('/register/', methods=["POST", "GET"])
 def register_new_users():
@@ -78,6 +89,8 @@ def register_new_users():
             
 @app.route('/login/', methods=["GET", "POST"])
 def handle_login():
+    global current_user_account
+
     if request.method == "GET":
         """
         Display the login form for registered members.
@@ -106,12 +119,12 @@ def handle_login():
             })
             
         else:
-            fetch_account = user_actions.sport_together_user(
+            current_user_account = user_actions.sport_together_user(
                 {
                     "email_address": payload["email_address"]
                 }, payload["password"])
 
-            if fetch_account.account is None:
+            if current_user_account.account is None:
                 print("Wrong password submitted.")
                 return jsonify({
                     "success": False,
@@ -121,10 +134,10 @@ def handle_login():
             else:
                 return jsonify({
                     "success": True,
-                    "message": fetch_account.return_user_info()
+                    "message": current_user_account.return_user_info()
                 })
             
-@app.route('/read_trips/', methods=["POST"])
+@app.route('/read_games/', methods=["POST"])
 def read_trips():
     if request.method == "POST":
         try:
@@ -132,37 +145,36 @@ def read_trips():
             print("Payload:")
             print(payload)
             
-            trip_ids = []
+            relevant_games = {}
             
-            if "trip_ids" in payload:
-                trip_ids = payload["trip_ids"]
+            if "game_ids" in payload:
+                relevant_games = game_actions.get_games(payload["game_ids"])
             
             elif "user_id" in payload:
-                user_trips = user_actions.get_trips(payload["user_id"])
-                if payload["get_user_owned"]:
-                    trip_ids = user_trips["trips_owned"]
-                else:
-                    trip_ids = user_trips["trips_joined"]
-                    
-            relevant_trips = trip_actions.get_trips(trip_ids)
+                if current_user_account is not None and payload["user_id"] != current_user_account["user_id"]:
+                    relevant_games = current_user_account.get_games()
             
             print("Response:")
-            pprint(relevant_trips)
-            return jsonify(relevant_trips)
+            pprint(relevant_games)
+            return jsonify(relevant_games)
              
         except KeyError as e:
             print("Error:")
             print(e.message)
             return {}
         
-@app.route("/update_trip/", methods=["POST"])
+@app.route("/update_game/", methods=["POST"])
 def update_trip():
     if request.method == "POST":
         payload = request.get_json()
         print("Payload:")
         pprint(payload)
         
-        results = trip_actions.update_trip(payload)
+        try:
+            results = current_user_account.update_game(payload)
+
+        except AttributeError:
+            results = None
         
         print("Response:")
         pprint(results)

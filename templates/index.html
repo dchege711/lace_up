@@ -33,7 +33,8 @@
             $(window).resize(function(){
                 var height = $("#navigation-placeholder").height();
                 $("#dummy_padded_div").height(height);
-            });    
+            }); 
+            $("#document-footer").load("./footer.html");   
         });
     </script>
 </head>
@@ -138,12 +139,7 @@
     <!-- End of Tiger Rides UI -->
     
     <!-- Footer style -->
-    <footer class="w3-row-padding w3-padding-small w3-container w3-black">
-        <p class="w3-center">
-            CSS provided by <a href="https://www.w3schools.com/w3css/">W3 CSS</a><br>
-            Logo made with <a href="https://www.designevo.com/" title="Free Online Logo Maker">DesignEvo</a><br>
-            &#169; Chege Gitau & Komron Shayegan, 2018
-        </p>
+    <footer id="document-footer" class="w3-row-padding w3-padding-small w3-container w3-black">
     </footer>
     
     <!-- End of Footer -->

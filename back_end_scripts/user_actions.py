@@ -197,21 +197,21 @@ class sport_together_user():
         """
         Fetch all the games that the user has created or joined.
 
-        @param `user_id` (String): The ID of the user.
-
         @returns: (JSON): Contains the keys `games_owned` and
-        `games_joined`.
+        `games_joined`, `orphaned_games`.
 
         """
         
         if self.account is None:
             return {
-                "games_owned": None, "games_joined": None
+                "games_owned": None, 
+                "games_joined": None, "orphaned_games": None
             }
         
         return {
-            "games_owned": self.account["games_owned"],
-            "games_joined": self.account["games_joined"]
+            "games_owned": game_actions.get_games(self.account["games_owned"]),
+            "games_joined": game_actions.get_games(self.account["games_joined"]),
+            "orphaned_games": game_actions.get_games(self.account["orphaned_games"])
         }
 
     def return_user_info(self, keys_to_use=None):
