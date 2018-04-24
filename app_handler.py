@@ -4,8 +4,10 @@ import os
 from pprint import pprint
 
 import sys
-sys.path.insert(0, "./back_end_scripts/")
-from mongo_db_client import sport_together_db
+import os 
+
+sys.path.insert(0, os.path.join(os.getcwd(), "back_end_scripts"))
+ 
 import user_actions
 import game_actions
 

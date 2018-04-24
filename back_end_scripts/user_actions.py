@@ -60,8 +60,8 @@ def register_user(new_user_info):
     # We won't allow accounts that have more than one email address
     if is_in_db({"email_address": new_user_info["email_address"]}):
         return {
-            "registration_status": False,
-            "registration_message": "That email address has already been taken."
+            "success": False,
+            "message": "That email address has already been taken."
         }
 
     # Get a unique ID for each user. This ID should be different from database ID
