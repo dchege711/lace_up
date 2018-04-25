@@ -13,9 +13,8 @@ function loadUserDetails(userDetails) {
                 <div class='w3-responsive'> <table class='w3-table-all' id="user_owned_games"> <tr>
                 <th>Game ID</th><th>Location</th><th>Time</th><th>Edit</th></tr></table></div>`;
 
-    var payload = { "user_id": userDetails.user_id }
 
-    makeHttpRequest("POST", "/read_games/", payload, function (results) {
+    makeHttpRequest("POST", "/read_games/", { "user_id": userDetails.user_id }, function (results) {
         var tableElement = document.getElementById("user_owned_games");
         for (let i = 0; i < userDetails.games_owned; i++) {
             tableElement.insertAdjacentHTML(
@@ -49,6 +48,7 @@ function makeHttpRequest(method, url, payload, callBack) {
 }
 
 function logInMember() {
+
     var form = document.getElementById("login_form");
     if (form.reportValidity() === false) {
         alert("Please fill out the required fields");

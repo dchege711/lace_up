@@ -107,6 +107,9 @@ def handle_login():
         """
         
         payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
         account_exists = user_actions.is_in_db({
             "email_address": payload["email_address"]
         })
@@ -189,6 +192,6 @@ def notFoundError(error):
 #_______________________________________________________________________________
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
 
 #_______________________________________________________________________________
