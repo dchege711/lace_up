@@ -24,7 +24,7 @@ def check_mandatory_fields(game_info):
     enough information to create a game.
 
     """
-    for expected_key in ("type", "location", "game_owner_id"):
+    for expected_key in ("type", "location", "game_owner_id", "game_owner_first_name"):
         if expected_key not in game_info.keys():
             raise KeyError(
                 "Did not find `", expected_key, "` as a key in `game_info`"
@@ -41,12 +41,19 @@ def convert_game_info_to_html_row(game_info):
 
     check_mandatory_fields(game_info)
 
+    if "game_attendees_first_names" in game_info:
+        attendee_names = ",".join(game_info["game_attendees_first_names"])
+    else:
+        attendee_names = " "
+
     return ''.join([
-        "<tr><td>#", str(game_info["game_id"]), "</td>",
+        "<tr><td>#", "<td>", game_info["type"], "</td>",
+        str(game_info["game_id"]), "</td>",
         "<td>", game_info["location"], "</td>",
-        "<td>", game_info["type"], "</td>",
-        "<td><button class='w3-btn w3-hover-white' onClick='return editgame(", 
-        str(game_info["game_id"]), 
+        "<td>", game_info["game_owner_first_name"], "</td>",
+        "<td>", attendee_names, "</td>",
+        "<td><button class='w3-btn w3-hover-white' onClick='return editGame(", 
+        str(game_info["game_id"]), ",", game_info["game_owner_id"],
         ")'> <b><i class='fa fa-pencil fa-fw'></i></b></button></td><tr>"
     ])
     
@@ -86,7 +93,10 @@ def update_game_append(new_game_info):
     game_to_modify = games_db.read(query)
     
     for key in new_game_info:
-        game_to_modify[key].append(new_game_info[key])
+        try:
+            game_to_modify[key].append(new_game_info[key])
+        except KeyError:
+            game_to_modify[key] = [new_game_info[key]]
 
     game_to_modify["html_version"] = convert_game_info_to_html_row(
         game_to_modify)

@@ -53,6 +53,9 @@ class sport_together_db():
 		
 	def read(self, query):
 		return self.collection.find_one(filter=query)
+
+	def scan(self):
+		return self.collection.find({})
 	
 	def delete(self, query_filter):
 		return self.collection.find_one_and_delete(query_filter)

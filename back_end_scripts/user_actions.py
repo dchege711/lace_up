@@ -48,7 +48,7 @@ def register_user(new_user_info):
 
     submitted_keys = set(new_user_info.keys())
     mandatory_keys = set(game_actions.supported_games)
-    for key in ("email_address", "password", "first_name", "last_name"):
+    for key in ("email_address", "password", "first_name", "last_name", "university"):
         mandatory_keys.add(key)
 
     for expected_key in mandatory_keys:
@@ -78,7 +78,7 @@ def register_user(new_user_info):
 
     salt = bcrypt.gensalt(rounds=12)
     hashed_pw = bcrypt.kdf(
-        password=new_user_info["password"].encode(),
+        password=new_user_info["password"].encode("utf-8"),
         salt=salt, desired_key_bytes=desired_key_bytes, rounds=pbkdf_rounds
     )
     validation_url = secrets.token_urlsafe(32)
@@ -89,7 +89,8 @@ def register_user(new_user_info):
         "last_name": new_user_info["last_name"],
         "username": username, "salt": salt, "hash": hashed_pw,
         "validation_url": validation_url, "already_validated": False,
-        "signup_time": datetime.today().timestamp(),
+        "signup_time": datetime.today().timestamp(), 
+        "university": new_user_info["university"],
         "user_id": new_user_id, "games_joined": [],
         "games_owned": [], "orphaned_games": []
     }
@@ -173,12 +174,9 @@ class sport_together_user():
             return None
 
         calculated_hash = bcrypt.kdf(
-            password=password.encode(), rounds=pbkdf_rounds,
+            password=password.encode("utf-8"), rounds=pbkdf_rounds,
             salt=account_info["salt"], desired_key_bytes=desired_key_bytes
         )
-
-        print(calculated_hash)
-        print(account_info["hash"])
 
         if calculated_hash == account_info["hash"]:
             return account_info
@@ -350,20 +348,24 @@ class sport_together_user():
         if self.account is None:
             return None
 
-        for expected_key in ("type", "location", "time"):
+        for expected_key in ("type", "location", "time", "date"):
             if expected_key not in game_info.keys():
                 raise KeyError(
-                    "Did not find `", expected_key, "` as a key in `game_info`"
+                    "".join([
+                        "Did not find '", expected_key, "' as a key in `game_info`"
+                    ])
                 )
 
         # Get a unique ID for each game. This ID should be different from database ID
-        alphabet = string.ascii_lowercase + string.digits
+        alphabet = string.ascii_uppercase + string.digits
         while True:
-            game_id = "".join(choice(alphabet) for i in range(10))
+            game_id = "".join(choice(alphabet) for i in range(12))
             if games_db.read({"game_id": game_id}) is None:
                 break
 
         game_info["game_id"] = game_id
+        game_info["game_owner_id"] = self.account["user_id"]
+        game_info["game_owner_first_name"] = self.account["first_name"]
         game_info["html_version"] = game_actions.convert_game_info_to_html_row(game_info)
 
         insert_results = games_db.create(game_info)
@@ -380,6 +382,29 @@ class sport_together_user():
         else:
             return None
     
+    def join_existing_game(self, game_id):
+        """
+        Join an already existing game.
+
+        @param `game_id` (str): The ID of the game to join.
+
+        @return (bool) `True` if successful, `False` otherwise.
+
+        """
+        if self.account is None:
+            return False
+
+        self.update_user_append({
+            "user_id": self.account["user_id"],
+            "games_joined": game_id
+        })
+
+        game_actions.update_game_append({
+            "game_id": game_id,
+            "game_attendees": self.account["user_id"],
+            "game_attendees_first_names": self.account["first_name"]
+        })
+
     def withdraw_from_game(self, game_id):
         """
         Remove the user's participation in the given game.
