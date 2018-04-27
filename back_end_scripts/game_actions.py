@@ -30,7 +30,7 @@ def check_mandatory_fields(game_info):
                 "Did not find `", expected_key, "` as a key in `game_info`"
             )
     
-def convert_game_info_to_html_row(game_info):
+def convert_game_info_to_html(game_info):
     """
     Prepare a HTML-encoded version of each game for rendering.
 
@@ -42,7 +42,9 @@ def convert_game_info_to_html_row(game_info):
     check_mandatory_fields(game_info)
 
     if "game_attendees_first_names" in game_info:
-        attendee_names = ",".join(game_info["game_attendees_first_names"])
+        attendee_names = ", ".join(
+            game_info["game_attendees_first_names"]
+        )
     else:
         attendee_names = " "
 
@@ -98,7 +100,7 @@ def update_game_append(new_game_info):
         except KeyError:
             game_to_modify[key] = [new_game_info[key]]
 
-    game_to_modify["html_version"] = convert_game_info_to_html_row(
+    game_to_modify["html_version"] = convert_game_info_to_html(
         game_to_modify)
     return _helper_write_changes_to_db(game_to_modify)
         
@@ -122,7 +124,7 @@ def update_game(new_game_info):
     for key in new_game_info:
         game_to_modify[key] = new_game_info[key]
     
-    game_to_modify["html_version"] = convert_game_info_to_html_row(game_to_modify)
+    game_to_modify["html_version"] = convert_game_info_to_html(game_to_modify)
     return _helper_write_changes_to_db(game_to_modify)
 
 def _helper_write_changes_to_db(new_game_info):
@@ -146,6 +148,15 @@ def _helper_write_changes_to_db(new_game_info):
         update_results["game_info"] = False
 
     return update_results
+
+def _change_all_games_html():
+    """
+    If we find a better way of generating the HTML for each game,
+    this function helps us apply the new HTML format to each game.
+    It assumes that `convert_game_info_to_html()` has been
+    appropriately updated.
+
+    """
 
 def main():    
     test_game = {
