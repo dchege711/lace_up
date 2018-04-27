@@ -142,6 +142,8 @@ def handle_login():
             
 @app.route('/read_games/', methods=["POST"])
 def read_trips():
+    global current_user_account
+
     if request.method == "POST":
         try:
             payload = request.get_json()
@@ -154,7 +156,7 @@ def read_trips():
                 relevant_games = game_actions.get_games(payload["game_ids"])
             
             elif "user_id" in payload:
-                if current_user_account is not None and payload["user_id"] != current_user_account["user_id"]:
+                if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
                     relevant_games = current_user_account.get_games()
             
             print("Response:")

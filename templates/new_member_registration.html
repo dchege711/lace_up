@@ -182,7 +182,7 @@
                     processForm('registration_form', '/register/', function (results) {
                         console.log(results);
                         alert(results["message"]);
-                        if (results["success"] === true) window.location = "/login"
+                        if (results["success"] === true) window.location = "/login/"
                     });
                     return false;
                 }

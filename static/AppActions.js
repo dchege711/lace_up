@@ -5,27 +5,35 @@ function loadUserDetails(userDetails) {
     document.getElementById("navbar_contents").insertAdjacentHTML(
         "beforeend",
         `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
-                    <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` + userDetails.first_name + `</strong></span>`
+                    <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` + userDetails.user_id + `</strong></span>`
     );
 
     var mainBody = document.getElementById("logged_in_contents");
     mainBody.innerHTML = `<p>These are your games</p>
                 <div class='w3-responsive'> <table class='w3-table-all' id="user_owned_games"> <tr>
-                <th>Game ID</th><th>Location</th><th>Time</th><th>Edit</th></tr></table></div>`;
-
+                <th>#</th><th>Type</th><th>Game ID</th><th>Location</th></th><th>Creator</th></th>
+                <th>Also Attending</th><th>Edit</th></tr></table></div>
+                <br><br>
+                <p>You're also joining these games</p>
+                <div class='w3-responsive'> <table class='w3-table-all' id="user_joined_games"> <tr>
+                <th>#</th><th>Type</th><th>Game ID</th><th>Location</th></th><th>Creator</th></th>
+                <th>Also Attending</th><th>Edit</th></tr></table></div>
+                `;
 
     makeHttpRequest("POST", "/read_games/", { "user_id": userDetails.user_id }, function (results) {
+        console.log("Loading user's games 123...");
+        console.log(userDetails.games_owned)
         var tableElement = document.getElementById("user_owned_games");
-        for (let i = 0; i < userDetails.games_owned; i++) {
+        for (let i = 0; i < userDetails.games_owned.length; i++) {
             tableElement.insertAdjacentHTML(
-                "beforeend", results.games_owned[i]["html_version"]
+                "beforeend", results.games_owned[i].html_version
             );
         }
 
         tableElement = document.getElementById("user_joined_games");
-        for (let i = 0; i < userDetails.games_owned; i++) {
+        for (let i = 0; i < userDetails.games_joined.length; i++) {
             tableElement.insertAdjacentHTML(
-                "beforeend", results.games_joined[i]["html_version"]
+                "beforeend", results.games_joined[i].html_version
             );
         }
     });
@@ -70,6 +78,10 @@ function logInMember() {
             alert(results.message);
         }
     });
+
+    // We need to return false to prevent the page from 
+    // reloading into a JSON object.
+    return false;
 }
 
 function editGame(gameID) {
