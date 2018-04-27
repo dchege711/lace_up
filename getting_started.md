@@ -29,7 +29,7 @@ I'll update more steps if need be. I'm always here for debugging help! - Chege
 
 * This part assumes that you have Git [installed](https://git-scm.com/book/en/v1/Getting-Started-Installing-Git). Git is a version control system that will save you from [clutter and endless pain](https://www.reddit.com/r/ProgrammerHumor/comments/72rki5/the_real_version_control/).
 
-* To get working knowledge, I recommend [Git Basics](https://git-scm.com/book/en/v1/Getting-Started-Git-Basics), [Git First-Time Setup](https://git-scm.com/book/en/v1/Getting-Started-First-Time-Git-Setup), and [Getting Help](https://git-scm.com/book/en/v1/Getting-Started-Getting-Help).As for the rest, God bless StackOverflow!
+* To get working knowledge, I recommend [Git Basics](https://git-scm.com/book/en/v1/Getting-Started-Git-Basics), [Git First-Time Setup](https://git-scm.com/book/en/v1/Getting-Started-First-Time-Git-Setup), and [Getting Help](https://git-scm.com/book/en/v1/Getting-Started-Getting-Help). As for the rest, God bless StackOverflow!
 
 * So far, you don't have LaceUp files on your computer yet. In your home directory, run `(lace_up) $ git clone https://github.com/dchege711/lace_up.git`. This copies the LaceUp repository into a folder named 'lace_up'. Go ahead and enter the directory using `(lace_up) $ cd lace_up`. Awesome! Sorry the setup took so long. But I promise you that it was worth it.
 

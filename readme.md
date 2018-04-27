@@ -1,6 +1,7 @@
 # Notes
 
-* There's a [getting started guide](https://github.com/dchege711/lace_up/blob/master/getting_started.md).
+* [Getting Started Guide](https://github.com/dchege711/lace_up/blob/master/getting_started.md)
+* [Navigating and Contributing to the Code Base](https://github.com/dchege711/lace_up/blob/master/navigating_the_code_base.md)
 
 ## Usage Tips
 
