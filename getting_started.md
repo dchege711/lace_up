@@ -22,7 +22,7 @@ I'll update more steps if need be. I'm always here for debugging help! - Chege
 
 * We now need to install the packages that we need for LaceUp. Run `(lace_up) $ pip install -r requirements.txt`. If you run `(lace_up) $ pip freeze`, the resulting list should contain all of the packages listed in requirements.txt. 
 
-* Side note: the file 'requirements.txt' is created using `(lace_up) $ pip freeze > requirements.txt`. If you have unnecessary packages installed, requirements.txt will include all of them. When we run the application in some server provider (e.g. Heroku), the resulting package will be larger, and maybe cost us more $$$. We don't want that. In general, it's a good practice to just install what you need. [*Cough*~~NodeJS~~*Cough*](https://twitter.com/iamdevloper/status/908335750797766656)
+* Side note: the file 'requirements.txt' is created using `(lace_up) $ pip freeze > requirements.txt`. If you have unnecessary packages installed, requirements.txt will include all of them. When we run the application in some server provider (e.g. Heroku), the resulting package will be larger, and maybe cost us more $$$. We don't want that. In general, it's a good practice to just install what you need. <sup>[*Cough* NodeJS *Cough*](https://twitter.com/iamdevloper/status/908335750797766656)</sup>
 
 
 ## Using Git
