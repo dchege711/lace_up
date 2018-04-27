@@ -18,7 +18,7 @@
 
 * For example, you might add ./templates/account_page.html. In account_page.html, you might have some HTML/CSS, a form element, a reference to ./static/HandleUserActions.js, and calls to relevant functions such as `updateUserPreferences()`
 
-## [Router: app_handler.py]
+## [Router: app_handler.py](https://github.com/dchege711/lace_up/blob/master/app_handler.py)
 
 * app_handler.py is our router. Routers know how to handle requests, e.g. https://lace-up.herokuapp.com/login/ is treated differently from https://lace-up.herokuapp.com/register/.
 
