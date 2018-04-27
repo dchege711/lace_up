@@ -12,6 +12,10 @@ import user_actions
 import game_actions
 
 app = Flask(__name__)
+
+# Setting this to zero tells Flask to stop cacheing static assets
+# like .js files
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 CORS(app)   # Allow Cross-Origin-Resource-Sharing on all methods
 
 # app_files = {
@@ -159,8 +163,6 @@ def read_trips():
                 if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
                     relevant_games = current_user_account.get_games()
             
-            print("Response:")
-            pprint(relevant_games)
             return jsonify(relevant_games)
              
         except KeyError as e:

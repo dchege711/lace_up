@@ -5,35 +5,47 @@ function loadUserDetails(userDetails) {
     document.getElementById("navbar_contents").insertAdjacentHTML(
         "beforeend",
         `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
-                    <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` + userDetails.user_id + `</strong></span>`
+                    <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` + userDetails.first_name + `</strong></span>`
     );
 
     var mainBody = document.getElementById("logged_in_contents");
-    mainBody.innerHTML = `<p>These are your games</p>
-                <div class='w3-responsive'> <table class='w3-table-all' id="user_owned_games"> <tr>
-                <th>#</th><th>Type</th><th>Game ID</th><th>Location</th></th><th>Creator</th></th>
-                <th>Also Attending</th><th>Edit</th></tr></table></div>
-                <br><br>
-                <p>You're also joining these games</p>
-                <div class='w3-responsive'> <table class='w3-table-all' id="user_joined_games"> <tr>
-                <th>#</th><th>Type</th><th>Game ID</th><th>Location</th></th><th>Creator</th></th>
-                <th>Also Attending</th><th>Edit</th></tr></table></div>
+    mainBody.innerHTML = `<p>These are your games:</p>
+                <div class='w3-container w3-padding' id="user_owned_games"></div>
+                
+                <hr><p>You're also joining these games..</p>
+                <div class='w3-container w3-padding' id="user_joined_games"></div>
                 `;
 
+    // Keys: time, date, location, type, game_id, game_owner_id, 
+    // game_owner_first_name, game_attendees, game_attendees_first_names
+
     makeHttpRequest("POST", "/read_games/", { "user_id": userDetails.user_id }, function (results) {
-        console.log("Loading user's games 123...");
-        console.log(userDetails.games_owned)
+        var gameInfo;
         var tableElement = document.getElementById("user_owned_games");
         for (let i = 0; i < userDetails.games_owned.length; i++) {
+            gameInfo = results.games_owned[i];
             tableElement.insertAdjacentHTML(
-                "beforeend", results.games_owned[i].html_version
+                "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
+                " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
+                "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
+                " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" + 
+                gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location + 
+                "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
+                gameInfo.game_attendees_first_names + "</p></div></div>"
             );
         }
 
         tableElement = document.getElementById("user_joined_games");
         for (let i = 0; i < userDetails.games_joined.length; i++) {
+            gameInfo = results.games_joined[i];
             tableElement.insertAdjacentHTML(
-                "beforeend", results.games_joined[i].html_version
+                "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
+                " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
+                "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
+                " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
+                gameInfo.time + ", " + gameInfo.date + ". @" + gameInfo.location +
+                "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
+                gameInfo.game_attendees_first_names + "</p></div></div>"
             );
         }
     });
