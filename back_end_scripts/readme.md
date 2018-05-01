@@ -6,7 +6,7 @@
 
 * The verification shouldn't block usage of the application. Tell the user that they need to verify their account within 7 days. Let them log in and carry on.
 
-:soon: Agree on payload for registering new users.
+:white_check_mark: Agree on payload for registering new users.
 
 * I think that the user should not submit information about new games as they register for an account. Let them do that once they're within the app.
 

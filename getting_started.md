@@ -18,11 +18,7 @@ I'll update more steps if need be. I'm always here for debugging help! - Chege
 
 * To move into the newly created env, run `$ source activate lace_up`. Your command prompt should now look like `(lace_up) $` instead of just `$`.
 
-* To confirm that the virtual environment is relatively clean, run `(lace_up) $ pip freeze`. The list of packages should be quite small (at most ~5).
-
-* We now need to install the packages that we need for LaceUp. Run `(lace_up) $ pip install -r requirements.txt`. If you run `(lace_up) $ pip freeze`, the resulting list should contain all of the packages listed in requirements.txt. 
-
-* Side note: the file 'requirements.txt' is created using `(lace_up) $ pip freeze > requirements.txt`. If you have unnecessary packages installed, requirements.txt will include all of them. When we run the application in some server provider (e.g. Heroku), the resulting package will be larger, and maybe cost us more $$$. We don't want that. In general, it's a good practice to just install what you need. <sup>[*Cough* NodeJS *Cough*](https://twitter.com/iamdevloper/status/908335750797766656)</sup>
+* To confirm that the virtual environment is relatively clean, run `(lace_up) $ pip freeze`. The list of packages should be quite small (at most ~20).
 
 
 ## Using Git
@@ -32,6 +28,10 @@ I'll update more steps if need be. I'm always here for debugging help! - Chege
 * To get working knowledge, I recommend [Git Basics](https://git-scm.com/book/en/v1/Getting-Started-Git-Basics), [Git First-Time Setup](https://git-scm.com/book/en/v1/Getting-Started-First-Time-Git-Setup), and [Getting Help](https://git-scm.com/book/en/v1/Getting-Started-Getting-Help). As for the rest, God bless StackOverflow!
 
 * So far, you don't have LaceUp files on your computer yet. In your home directory, run `(lace_up) $ git clone https://github.com/dchege711/lace_up.git`. This copies the LaceUp repository into a folder named 'lace_up'. Go ahead and enter the directory using `(lace_up) $ cd lace_up`. Awesome! Sorry the setup took so long. But I promise you that it was worth it.
+
+* We now need to install the packages that we need for LaceUp. Run `(lace_up) $ pip install -r requirements.txt`. If you run `(lace_up) $ pip freeze`, the resulting list should contain all of the packages listed in requirements.txt. 
+
+* Side note: the file 'requirements.txt' is created using `(lace_up) $ pip freeze > requirements.txt`. If you have unnecessary packages installed, requirements.txt will include all of them. When we run the application in some server provider (e.g. Heroku), the resulting package will be larger, and maybe cost us more $$$. We don't want that. In general, it's a good practice to just install what you need. <sup>[*Cough* NodeJS *Cough*](https://twitter.com/iamdevloper/status/908335750797766656)</sup>
 
 * Now that you've read the 3 articles above, let's get down to what it means for LaceUp. We want to have a special branch that only has code that runs on the actual website. We will not be experimenting stuff on this branch. Let that branch be `master`. 
 
