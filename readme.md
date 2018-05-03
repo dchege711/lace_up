@@ -15,7 +15,7 @@
 
 :soon: Allow users to edit games that they've already created `/lace-up/<GAME_ID>/`.
 
-:soon: Allow users to create new events at `/lace-up/create/`.
+:soon: Allow users to create new events at `/lace-up/create/`. (Alex is working on this)
 
 :soon: Filter and recommended games through the user's home feed at `/lace-up/home/`.
 
