@@ -199,3 +199,6 @@ if __name__ == '__main__':
     app.run(debug=False)
 
 #_______________________________________________________________________________
+
+@app.route('/creategame/', methods=["GET", "POST"])
+def createGame():
