@@ -13,8 +13,6 @@ var requiredFields = {
  */
 function processFormAndPost(formID, url, callBack) {
 
-    console.log("Sending " + formID + " to " + url);
-
     var form = document.getElementById(formID);
     var elements = form.elements;
 
@@ -48,9 +46,6 @@ function sendHTTPRequest(method, url, payload, callBack) {
         }
     }
     xhttp.open(method, url, true);
-    console.log("This is the payload being sent...")
-    console.log(payload);
-
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(JSON.stringify(payload));
 
