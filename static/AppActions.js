@@ -85,6 +85,9 @@ function logInMember() {
     makeHttpRequest("POST", "/login/", payload, function(results) {
         console.log(results);
         if (results.success == true) {
+            for (const key in results.message) {
+                localStorage.setItem(key, results.message[key]);
+            }
             loadUserDetails(results.message);
         } else {
             alert(results.message);

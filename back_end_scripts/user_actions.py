@@ -17,6 +17,7 @@ import game_actions
 
 users_db = sport_together_db("sport_together_user_account_info")
 games_db = sport_together_db("sport_together_game_details")
+sessions_db = sport_together_db("session_info")
 
 # Instance variables for authentication purposes with bcrypt
 desired_key_bytes = 32
@@ -241,7 +242,8 @@ class sport_together_user():
             "expiry": datetime.now().timestamp() + 5 * 3600,
             "user_id": self.account["user_id"]
         }
-        users_db.create(session_token)
+
+        sessions_db.create(session_token)
         return session_token
 
 
