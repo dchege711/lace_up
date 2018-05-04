@@ -1,14 +1,15 @@
-function loadUserDetails(userDetails) {
-    // Replace the navbar links with acknowledgement of the user loggin in
-    document.getElementById("register_navbar_link").style.display = "none";
-    document.getElementById("login_navbar_link").style.display = "none";
-    document.getElementById("navbar_contents").insertAdjacentHTML(
-        "beforeend",
-        `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
-                    <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` + userDetails.first_name + `</strong></span>`
-    );
+function loadUserDetails() {
 
-    var mainBody = document.getElementById("logged_in_contents");
+    // Fetch the cached details about the user.
+    var userDetails = {};
+    userDetails.first_name = localStorage.getItem("first_name");
+    userDetails.games_joined = localStorage.getItem("games_joined").split(",");
+    userDetails.games_owned = localStorage.getItem("games_owned").split(",");
+    userDetails.orphaned_games = localStorage.getItem("orphaned_games").split(",");
+    userDetails.user_id = localStorage.getItem("user_id");
+    userDetails.session_token = localStorage.getItem("session_token");
+
+    var mainBody = document.getElementById("games_feed");
     mainBody.innerHTML = `<p>These are your games:</p>
                 <div class='w3-container w3-padding' id="user_owned_games"></div>
                 
@@ -53,6 +54,22 @@ function loadUserDetails(userDetails) {
     return false;
 }
 
+/*
+ * Once a user logs in, update the nav bar with acknowledgement that they've
+ * logged in.
+ */ 
+function updateNavBarWithUserDetails() {
+    // Replace the navbar links with acknowledgement of the user loggin in
+    document.getElementById("register_navbar_link").style.display = "none";
+    document.getElementById("login_navbar_link").style.display = "none";
+    document.getElementById("navbar_contents").insertAdjacentHTML(
+        "beforeend",
+        `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
+            <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` 
+            + localStorage.getItem("first_name") + `</strong></span>`
+    );
+}
+
 function makeHttpRequest(method, url, payload, callBack) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -83,9 +100,11 @@ function logInMember() {
     }
 
     makeHttpRequest("POST", "/login/", payload, function(results) {
-        console.log(results);
         if (results.success == true) {
-            loadUserDetails(results.message);
+            for (const key in results.message) {
+                localStorage.setItem(key, results.message[key]);
+            }
+            window.location = "/home/";
         } else {
             alert(results.message);
         }

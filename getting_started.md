@@ -14,11 +14,11 @@ I'll update more steps if need be. I'm always here for debugging help! - Chege
 
 * We'll start by creating an empty virtual env (without any packages). I recommend [Conda's package manager](https://conda.io/docs/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands). The rest of the instructions assume that you have [Conda installed](https://conda.io/docs/user-guide/install/index.html). 
 
-* Run `$ conda create --no-default-packages -n lace_up python=3.6`. The virtual environment should contain just the packages needed to run LaceUp, and nothing else. If we have more packages than necessary, the application's package will be unecessarily bloated. That's why we include the *no-default-packages* flag.
+* Run `$ conda create --no-default-packages -n lace_up python=3.6`. The virtual environment should contain just the packages needed to run LaceUp, and nothing else. If we have more packages than necessary, the application's package will be unecessarily bloated. That's why we include the *no-default-packages* flag. However, about 15 packages will be installed by default.
 
 * To move into the newly created env, run `$ source activate lace_up`. Your command prompt should now look like `(lace_up) $` instead of just `$`.
 
-* To confirm that the virtual environment is relatively clean, run `(lace_up) $ pip freeze`. The list of packages should be quite small (at most ~20).
+* To confirm that the virtual environment is relatively clean, run `(lace_up) $ pip freeze`. The list of packages should be quite small.
 
 
 ## Using Git
@@ -37,7 +37,7 @@ I'll update more steps if need be. I'm always here for debugging help! - Chege
 
 * Say you want to add discussion threads to each upcoming game:
 
-    * You can't do this on the `master` branch, so you create your own branch using `(lace_up) $ git checkout -b add_discussion_threads`. You should receive a confirmation message saying that you have a new branch, which is even with master.
+    * You can't do this on the `master` branch, so you create your own branch using `(lace_up) $ git checkout -b add_discussion_threads`. You should receive a confirmation message saying that you have a new branch.
     * Now that you have your own branch, go ahead and hack away. Although you can use `(lace_up) $ git add .` generously, be judicious about using `(lace_up) $ git commit -m "<MEANINGFUL_COMMIT_MESSAGE>"`. Relevant [blog](https://www.git-tower.com/learn/git/ebook/en/command-line/appendix/best-practices) [posts](http://alistapart.com/article/the-art-of-the-commit).
     * Occassionally, back up your code on Github, by running `(lace_up) $ git push origin add_discussion_threads`.
     * Once you're done and you've confirmed that your changes work as expected, it's time to push that to the `master` branch. Yay! Go ahead and run `(lace_up) $ git push origin master`. 

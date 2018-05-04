@@ -11,12 +11,13 @@ import secrets
 import string
 from random import choice
 import bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
 from mongo_db_client import sport_together_db
 import game_actions
 
 users_db = sport_together_db("sport_together_user_account_info")
 games_db = sport_together_db("sport_together_game_details")
+sessions_db = sport_together_db("session_info")
 
 # Instance variables for authentication purposes with bcrypt
 desired_key_bytes = 32
@@ -154,8 +155,18 @@ class sport_together_user():
         @param `password` (str): The password associated with the account.
 
         """
+        # Store the identifier for later references
         self.identifier_key_val_pair = identifier_key_val_pair
+
+        # Attempt to authenticate and load the user details
         self.account = self._authenticate_user(password)
+
+        # If successfully authenticated, assign a session ID for further
+        # session requests without requiring a password.
+        if self.account is not None:
+            session_token = self._create_session_token()
+            for key in session_token:
+                self.account[key] = session_token[key]
     
     def _authenticate_user(self, password):
         """
@@ -214,6 +225,28 @@ class sport_together_user():
             "orphaned_games": game_actions.get_games(self.account["orphaned_games"])
         }
 
+    def _create_session_token(self):
+        """
+        Create a token for use in the current user session. This token expires
+        after a set time.
+
+        @returns (JSON): Empty JSON if user is not authenticated. Otherwise, 
+        the keys include `token`, `expiry` and `user_id`.
+
+        """
+        if self.account is None:
+            return {}
+
+        session_token = {
+            "session_token": secrets.token_urlsafe(nbytes=32),
+            "expiry": datetime.now().timestamp() + 5 * 3600,
+            "user_id": self.account["user_id"]
+        }
+
+        sessions_db.create(session_token)
+        return session_token
+
+
     def return_user_info(self, keys_to_use=None):
         """
         Return relevant account information. 
@@ -231,7 +264,8 @@ class sport_together_user():
 
         if keys_to_use == None:
             keys_to_use = [
-                "user_id", "first_name", "games_joined", "games_owned", "orphaned_games"
+                "user_id", "first_name", "games_joined", "games_owned", 
+                "orphaned_games", "session_token"
             ]
         
         user_info_payload = {}
