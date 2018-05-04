@@ -13,6 +13,8 @@
 
 :white_check_mark: Clicking on the logo shouldn't log the user out. Take them to `/lace-up/home/`. Clean up `/lace-up/`, the home URL. It currently shows stuff from Tiger Rides.
 
+:soon: Manage session data. When a user logs out. Clean up after them. (Chege is working on this)
+
 :soon: Allow users to edit games that they've already created `/lace-up/<GAME_ID>/`. (Alex & Ally are working on this)
 
 :soon: Allow users to create new events at `/lace-up/create/`. (Alex & Ally are working on this)
