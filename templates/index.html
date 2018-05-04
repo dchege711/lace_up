@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="./static/AppActions.js"></script>
+    <script src="./static/ProcessForm.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <title>Lace Up</title>
     <style>
@@ -258,7 +258,7 @@
          */
         function logInMember() {
 
-            processFromAndPost("login_form", "/login/", function (results) {
+            processFormAndPost("login_form", "/login/", function (results) {
                 if (results.success == true) {
                     for (const key in results.message) {
                         localStorage.setItem(key, results.message[key]);

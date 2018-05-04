@@ -13,9 +13,11 @@ var requiredFields = {
  */
 function processFormAndPost(formID, url, callBack) {
 
+    console.log("Sending " + formID + " to " + url);
+
     var form = document.getElementById(formID);
     var elements = form.elements;
-    
+
     if (form.reportValidity() === false) {
         alert("Please fill out the required fields");
         return;

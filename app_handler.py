@@ -62,18 +62,11 @@ def return_footer():
     """
     return render_template("footer.html")
     
-@app.route('/register/', methods=["POST", "GET"])
+@app.route('/register/', methods=["POST"])
 def register_new_users():
     global current_user_account
 
-    if request.method == "GET":
-        """
-        Show the page necessary for a user to register for Tiger Rides.
-        
-        """
-        return render_template("new_member_registration.html")
-    
-    elif request.method == "POST":
+    if request.method == "POST":
         """
         Process the information that was entered on the registration form.
         Return whether the reigstration was successful or not.
@@ -98,18 +91,11 @@ def register_new_users():
                 "message": "Unsuccessful registration. Please try again after a few minutes."
             })
             
-@app.route('/login/', methods=["GET", "POST"])
+@app.route('/login/', methods=["POST"])
 def handle_login():
     global current_user_account
-
-    if request.method == "GET":
-        """
-        Display the login form for registered members.
-        
-        """
-        return render_template("login.html")
     
-    elif request.method == "POST":
+    if request.method == "POST":
         """
         Process a login request. 
         Deny authentication for users that submit wrong passwords.
