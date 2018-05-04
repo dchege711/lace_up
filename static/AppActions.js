@@ -60,12 +60,10 @@ function loadUserDetails() {
  */ 
 function updateNavBarWithUserDetails() {
     // Replace the navbar links with acknowledgement of the user loggin in
-    document.getElementById("register_navbar_link").style.display = "none";
-    document.getElementById("login_navbar_link").style.display = "none";
     document.getElementById("navbar_contents").insertAdjacentHTML(
         "beforeend",
         `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
-            <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` 
+            <span class='w3-bar-item w3-orange w3-right'><strong>` 
             + localStorage.getItem("first_name") + `</strong></span>`
     );
 }
@@ -149,4 +147,13 @@ function refreshGames(userId, get_user_owned) {
     });
 
     return false;
+}
+
+/**
+ * Some divs need to be the same height. This function takes care of that.
+ * It's been duplicated in ProcessForm.js too
+ */
+function resizeElements() {
+    var height = $("#navigation-snippet").height();
+    $("#dummy_padded_div").height(height);
 }

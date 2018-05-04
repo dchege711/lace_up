@@ -69,7 +69,14 @@ def register_new_users():
     if request.method == "POST":
         """
         Process the information that was entered on the registration form.
-        Return whether the reigstration was successful or not.
+        
+        @returns (JSON): `success` will be True iff the registration was 
+        successfully completed. 
+        If `success` is `True`, `message` will have the following keys: 
+        `user_id`, `first_name`, `games_joined`, `games_owned`, 
+        `orphaned_games`, `session_token`.
+        If `success` is `False`, `message` will contain a string explaining
+        what went wrong.
         
         """
         payload = request.get_json()
@@ -83,7 +90,11 @@ def register_new_users():
 
             return jsonify({
                 "success": True,
-                "message": current_user_account.return_user_info()
+                "message": current_user_account.return_user_info(
+                    keys_to_use=[
+                    "user_id", "first_name", "games_joined", "games_owned",
+                    "orphaned_games", "session_token"
+                ])
             })
         else:
             return jsonify({
@@ -97,9 +108,15 @@ def handle_login():
     
     if request.method == "POST":
         """
-        Process a login request. 
-        Deny authentication for users that submit wrong passwords.
-        Otherwise, return the user's first name and their trips.
+        Process a login request.
+         
+        @returns (JSON): `success` will be True iff the registration was 
+        successfully completed. 
+        If `success` is `True`, `message` will have the following keys: 
+        `user_id`, `first_name`, `games_joined`, `games_owned`, 
+        `orphaned_games`, `session_token`.
+        If `success` is `False`, `message` will contain a string explaining
+        what went wrong.
         
         """
         
@@ -134,7 +151,11 @@ def handle_login():
             else:
                 return jsonify({
                     "success": True,
-                    "message": current_user_account.return_user_info()
+                    "message": current_user_account.return_user_info(
+                        keys_to_use=[
+                            "user_id", "first_name", "games_joined", "games_owned",
+                            "orphaned_games", "session_token"
+                        ])
                 })
             
 @app.route('/read_games/', methods=["POST"])

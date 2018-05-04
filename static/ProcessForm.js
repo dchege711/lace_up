@@ -50,3 +50,12 @@ function sendHTTPRequest(method, url, payload, callBack) {
     xhttp.send(JSON.stringify(payload));
 
 }
+
+/**
+ * Some divs need to be the same height. This function takes care of that.
+ * It's been duplicated in AppActions.js too
+ */
+function resizeElements() {
+    var height = $("#navigation-snippet").height();
+    $("#dummy_padded_div").height(height);
+}
