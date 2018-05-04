@@ -9,9 +9,9 @@
 
 ## Dear Santa, All I want for the master branch is...
 
-:white_check_mark: Maintain a [session](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) once the user logs in or registers. This enables us to load other URLs e.g. `lace-up/account/` without requiring a second login. (Chege is working on this)
+:white_check_mark: Maintain a [session](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) once the user logs in or registers. This enables us to load other URLs e.g. `lace-up/account/` without requiring a second login.
 
-:soon: Clicking on the logo shouldn't log the user out. Take them to `/lace-up/home/`. Clean up `/lace-up/`, the home URL. It currently shows stuff from Tiger Rides.
+:soon: Clicking on the logo shouldn't log the user out. Take them to `/lace-up/home/`. Clean up `/lace-up/`, the home URL. It currently shows stuff from Tiger Rides. (Chege is working on this)
 
 :soon: Allow users to edit games that they've already created `/lace-up/<GAME_ID>/`.
 
