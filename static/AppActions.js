@@ -84,37 +84,6 @@ function makeHttpRequest(method, url, payload, callBack) {
     return false;
 }
 
-function logInMember() {
-
-    var form = document.getElementById("login_form");
-    if (form.reportValidity() === false) {
-        alert("Please fill out the required fields");
-        return;
-    }
-
-    var elements = form.elements;
-    var payload = {};
-
-    for (var i = 0; i < elements.length; i++) {
-        payload[elements[i].name] = elements[i].value;
-    }
-
-    makeHttpRequest("POST", "/login/", payload, function(results) {
-        if (results.success == true) {
-            for (const key in results.message) {
-                localStorage.setItem(key, results.message[key]);
-            }
-            window.location = "/home/";
-        } else {
-            alert(results.message);
-        }
-    });
-
-    // We need to return false to prevent the page from 
-    // reloading into a JSON object.
-    return false;
-}
-
 function editGame(gameID) {
     var elementToBeModified = document.getElementById("logged_in_contents");
     elementToBeModified.insertAdjacentHTML("afterbegin", "<form id='game_to_be_changed'></form>");
