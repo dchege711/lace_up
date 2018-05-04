@@ -52,7 +52,7 @@
 
     <!-- End of Navigation Bar -->
     
-    <!-- Main part of the Tiger Riges Application UI -->
+    <!-- Main part of the Lace Up Application UI -->
     
     <div class="w3-container w3-white" style="opacity:0.85" id="tiger_rides_body">
     
@@ -60,70 +60,11 @@
         the first element that has text. See the script in the header for info -->
         <div class="w3-container" id="dummy_padded_div" style="height: 50px"></div>
 
-        <!-- First Grid (Search Options)-->
+        <!-- First Grid -->
         <div class="w3-row-padding w3-padding-16 w3-container">
             
-            <div class="w3-container w3-padding-16">
-                
-                <h4>Search for other Tigers going to Reunions!<br></h4>
-                                
-                <form id="search-form">
-                    
-                    <!-- Load items useful for formulating search queries -->
-                    <datalist id="origin_state">
-                        <option value="AL"> <option value="AK"> <option value="AZ">
-                        <option value="AR"> <option value="CA"> <option value="CO">
-                        <option value="CT"> <option value="DE"> <option value="FL">
-                        <option value="GA"> <option value="HI"> <option value="ID">
-                        <option value="IL"> <option value="IN"> <option value="IA">
-                        <option value="KS"> <option value="KY"> <option value="LA">
-                        <option value="ME"> <option value="MD"> <option value="MA">
-                        <option value="MI"> <option value="MN"> <option value="MS">
-                        <option value="MO"> <option value="MT"> <option value="NE">
-                        <option value="NV"> <option value="NH"> <option value="NJ">
-                        <option value="NM"> <option value="NY"> <option value="NC">
-                        <option value="ND"> <option value="OH"> <option value="OK">
-                        <option value="OR"> <option value="PA"> <option value="RI">
-                        <option value="SC"> <option value="SD"> <option value="TN">
-                        <option value="TX"> <option value="UT"> <option value="VT">
-                        <option value="VA"> <option value="WA"> <option value="WV">
-                        <option value="WI"> <option value="WY"> <option value="GU">
-                        <option value="PR"> <option value="VI">
-                    </datalist>
-                
-                    <label class="w3-padding-small" for="state">Which state are you coming from? </label>
-                    <input class="w3-padding-small" list="origin_state" type="text" name="state" placeholder="e.g. NJ">
-                
-                    <button class="w3-button:hover w3-padding-small" type="submit" onclick="return searchTigers()">Search</button>
-                    
-                </form>
-                
-            </div>
             
-            <!-- Process the search query -->
-            <script>
-                function searchTigers() {
-                    var formData = document.getElementById("search-form");
-                    var payload = {};
-                    payload["origin_state"] = formData.elements[0].value;
-                    
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            var searchResults = JSON.parse(this.responseText);
-                            var tigerCards = document.getElementById("tiger-search-results");
-                            tigerCards.innerHTML = searchResults;
-                        }
-                    
-                    }
-                    xhttp.open("POST", "/search/", true);
-                    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                    xhttp.send(JSON.stringify(payload));
-                    
-                    // https://stackoverflow.com/questions/7393484/xmlhttprequest-asynchronous-not-working-always-returns-status-0
-                    return false;
-                }
-            </script>
+            
             
         </div>
         <!-- End of First Grid -->
@@ -135,7 +76,7 @@
     
     </div>
     
-    <!-- End of Tiger Rides UI -->
+    <!-- End of Lace Up UI -->
     
     <!-- Footer style -->
     <footer id="document-footer" class="w3-row-padding w3-padding-small w3-container w3-black">

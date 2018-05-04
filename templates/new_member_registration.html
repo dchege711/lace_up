@@ -180,13 +180,13 @@
             <script>
                 function handleRegistrationForm() {
                     processForm('registration_form', '/register/', function (results) {
-                        console.log(results);
-                        alert(results["message"]);
                         if (results["success"] === true) {
                             for (const key in results.message) {
                                 localStorage.setItem(key, results.message[key]);
                             }
                             window.location = "/home/";
+                        } else {
+                            alert(results.message);
                         }
                     });
                     return false;
