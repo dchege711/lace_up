@@ -64,6 +64,8 @@ def return_footer():
     
 @app.route('/register/', methods=["POST", "GET"])
 def register_new_users():
+    global current_user_account
+
     if request.method == "GET":
         """
         Show the page necessary for a user to register for Tiger Rides.
@@ -81,9 +83,14 @@ def register_new_users():
         
         successfully_registered_user = user_actions.register_user(payload)["success"]
         if successfully_registered_user:
+            current_user_account = user_actions.sport_together_user(
+                {"email_address": payload["email_address"]}, 
+                payload["password"]
+            )
+
             return jsonify({
                 "success": True,
-                "message": "Successful registration. Now log in with your email address and password"
+                "message": current_user_account.return_user_info()
             })
         else:
             return jsonify({
@@ -186,6 +193,15 @@ def update_trip():
         print("Response:")
         pprint(results)
         return jsonify(results)
+
+@app.route("/home/", methods=["GET", "POST"])
+def serve_home_page():
+    if request.method == "GET":
+        """
+        Display the home feed for the user.
+        
+        """
+        return render_template("home.html")
 
 #_______________________________________________________________________________
 
