@@ -189,37 +189,41 @@ def update_trip():
 
 #_______________________________________________________________________________
 
-@app.route('/creategame/', methods=["GET", "POST"])
+@app.route('/creategame/', methods=["GET","POST"])
 def createGame():
-    global current_user_account 
-        
+    global current_user_account
+
     if request.method == "GET":
         """
         Show the page necessary for a user to create a game.
-            
+
         """
         return render_template("create_event.html")
-        
+
     elif request.method == "POST":
         """
-        Process the information that was entered on the event form.
+        Process the information that was entered on the event form. 
         Return whether the event creation was successful or not.
-            
-        """
         
+        """
+
         payload = request.get_json()
 
-        successful_creation_event = user_actions.add_game(payload)["success"]
-        if successful_creation_event:
-            return jsonify({
-                "success": True,
-                "messageGame": "Successful creation of game. We hope you have fun playing!"
-            })
+        if current_user_account is not None and payload["user_id"] == current_user_account["user_id"]:
+            new_game_id = current_user_account.add_game(payload)
         else:
+            new_game_id = None
             return jsonify({
                 "success": False,
                 "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
             })
+        
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
 
 @app.errorhandler(404)
 def notFoundError(error):
