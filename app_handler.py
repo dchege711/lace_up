@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request, render_template, send_file
+from flask import Flask, jsonify, make_response, request, render_template, send_file, url_for, redirect
 from flask_cors import CORS
 import os
 from pprint import pprint
@@ -189,6 +189,38 @@ def update_trip():
 
 #_______________________________________________________________________________
 
+@app.route('/creategame/', methods=["GET", "POST"])
+def createGame():
+    global current_user_account 
+        
+    if request.method == "GET":
+        """
+        Show the page necessary for a user to create a game.
+            
+        """
+        return render_template("create_event.html")
+        
+    elif request.method == "POST":
+        """
+        Process the information that was entered on the event form.
+        Return whether the event creation was successful or not.
+            
+        """
+        
+        payload = request.get_json()
+
+        successful_creation_event = user_actions.add_game(payload)["success"]
+        if successful_creation_event:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
+            })
+
 @app.errorhandler(404)
 def notFoundError(error):
     return "Page Not Found", 404
@@ -200,5 +232,3 @@ if __name__ == '__main__':
 
 #_______________________________________________________________________________
 
-@app.route('/creategame/', methods=["GET", "POST"])
-def createGame():
