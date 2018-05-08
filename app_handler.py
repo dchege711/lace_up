@@ -204,12 +204,12 @@ def createGame():
         """
         Process the information that was entered on the event form. 
         Return whether the event creation was successful or not.
-        
+
         """
 
         payload = request.get_json()
 
-        if current_user_account is not None and payload["user_id"] == current_user_account["user_id"]:
+        if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
             new_game_id = current_user_account.add_game(payload)
         else:
             new_game_id = None
@@ -224,6 +224,13 @@ def createGame():
                 "messageGame": "Successful creation of game. We hope you have fun playing!"
             })
 
+
+        
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
 
 @app.errorhandler(404)
 def notFoundError(error):
