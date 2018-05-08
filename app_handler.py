@@ -62,28 +62,39 @@ def return_footer():
     """
     return render_template("footer.html")
     
-@app.route('/register/', methods=["POST", "GET"])
+@app.route('/register/', methods=["POST"])
 def register_new_users():
-    if request.method == "GET":
-        """
-        Show the page necessary for a user to register for Tiger Rides.
-        
-        """
-        return render_template("new_member_registration.html")
-    
-    elif request.method == "POST":
+    global current_user_account
+
+    if request.method == "POST":
         """
         Process the information that was entered on the registration form.
-        Return whether the reigstration was successful or not.
+        
+        @returns (JSON): `success` will be True iff the registration was 
+        successfully completed. 
+        If `success` is `True`, `message` will have the following keys: 
+        `user_id`, `first_name`, `games_joined`, `games_owned`, 
+        `orphaned_games`, `session_token`.
+        If `success` is `False`, `message` will contain a string explaining
+        what went wrong.
         
         """
         payload = request.get_json()
         
         successfully_registered_user = user_actions.register_user(payload)["success"]
         if successfully_registered_user:
+            current_user_account = user_actions.sport_together_user(
+                {"email_address": payload["email_address"]}, 
+                payload["password"]
+            )
+
             return jsonify({
                 "success": True,
-                "message": "Successful registration. Now log in with your email address and password"
+                "message": current_user_account.return_user_info(
+                    keys_to_use=[
+                    "user_id", "first_name", "games_joined", "games_owned",
+                    "orphaned_games", "session_token"
+                ])
             })
         else:
             return jsonify({
@@ -91,22 +102,21 @@ def register_new_users():
                 "message": "Unsuccessful registration. Please try again after a few minutes."
             })
             
-@app.route('/login/', methods=["GET", "POST"])
+@app.route('/login/', methods=["POST"])
 def handle_login():
     global current_user_account
-
-    if request.method == "GET":
-        """
-        Display the login form for registered members.
-        
-        """
-        return render_template("login.html")
     
-    elif request.method == "POST":
+    if request.method == "POST":
         """
-        Process a login request. 
-        Deny authentication for users that submit wrong passwords.
-        Otherwise, return the user's first name and their trips.
+        Process a login request.
+         
+        @returns (JSON): `success` will be True iff the registration was 
+        successfully completed. 
+        If `success` is `True`, `message` will have the following keys: 
+        `user_id`, `first_name`, `games_joined`, `games_owned`, 
+        `orphaned_games`, `session_token`.
+        If `success` is `False`, `message` will contain a string explaining
+        what went wrong.
         
         """
         
@@ -141,7 +151,11 @@ def handle_login():
             else:
                 return jsonify({
                     "success": True,
-                    "message": current_user_account.return_user_info()
+                    "message": current_user_account.return_user_info(
+                        keys_to_use=[
+                            "user_id", "first_name", "games_joined", "games_owned",
+                            "orphaned_games", "session_token"
+                        ])
                 })
             
 @app.route('/read_games/', methods=["POST"])
@@ -186,6 +200,15 @@ def update_trip():
         print("Response:")
         pprint(results)
         return jsonify(results)
+
+@app.route("/home/", methods=["GET", "POST"])
+def serve_home_page():
+    if request.method == "GET":
+        """
+        Display the home feed for the user.
+        
+        """
+        return render_template("home.html")
 
 #_______________________________________________________________________________
 
@@ -239,7 +262,7 @@ def notFoundError(error):
 #_______________________________________________________________________________
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
 
 #_______________________________________________________________________________
 

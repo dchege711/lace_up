@@ -3,15 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./static/ProcessForm.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <title>Lace Up</title>
     <style>
+<<<<<<< HEAD
         body,
         h1,
         h2,
@@ -33,6 +36,20 @@
             font-size: 200px
         }
         
+=======
+        body,h1,h2,h3,h4,h5,h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,h1,button {
+            font-family: "Montserrat", sans-serif
+        }
+
+        .fa-anchor,.fa-coffee {
+            font-size: 200px
+        }
+
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
         body {
             display: flex;
             min-height: 100vh;
@@ -41,12 +58,23 @@
             background-blend-mode: overlay;
             background-size: 100%;
         }
+<<<<<<< HEAD
         
         #tiger_rides_body {
+=======
+
+        form {
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        #lace_up_body {
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
             flex: 1
         }
     </style>
     <script>
+<<<<<<< HEAD
         // Resize elements that should have matching heights
         $(document).ready(function() {
             $(window).resize(function() {
@@ -54,7 +82,27 @@
                 $("#dummy_padded_div").height(height);
             });
             $("#document-footer").load("./footer.html");
+=======
+        $(document).ready(function () {
+            // Load the header and the footer
+            $("#document-footer").load("./footer.html");
+            $("#navigation-placeholder").load("./navigation.html", function() {
+                var height = $("#navigation-snippet").height();
+                $("#dummy_padded_div").height(height);
+            });
+
+            // Resize elements that should have matching heights
+            $(window).resize(function () {
+                var height = $("#navigation-snippet").height();
+                $("#dummy_padded_div").height(height);
+            });
+
+            // By default, let the login form be displayed instead of
+            // the signup form.
+            displayForm("login_form");
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
         });
+
     </script>
 </head>
 
@@ -63,6 +111,7 @@
     <!-- Navigation Bar -->
 
     <div id="navigation-placeholder"></div>
+<<<<<<< HEAD
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script>
         $(function() {
@@ -75,11 +124,20 @@
     <!-- Main part of the Tiger Riges Application UI -->
 
     <div class="w3-container w3-white" style="opacity:0.85" id="tiger_rides_body">
+=======
+
+    <!-- End of Navigation Bar -->
+
+    <!-- Main part of the Lace Up Application UI -->
+
+    <div class="w3-container w3-white w3-padding-large" id="lace_up_body">
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
 
         <!-- Padded element to make sure that the navigation bar never covers
-        the first element that has text. See the script in the header for info -->
+            the first element that has text. See the script in the header for info -->
         <div class="w3-container" id="dummy_padded_div" style="height: 50px"></div>
 
+<<<<<<< HEAD
         <!-- First Grid (Search Options)-->
         <div class="w3-row-padding w3-padding-16 w3-container">
 
@@ -156,13 +214,177 @@
     </div>
 
     <!-- End of Tiger Rides UI -->
+=======
+        
+        <div class="w3-container w3-twothird w3-padding-large" id="login_signup_contents">
+            
+            <!-- Present a LogIn form.... -->
+
+            <form class="w3-padding-large w3-left" id="login_form" method="post">
+
+                <label for="email_address"> Email: </label>
+                <input class="w3-input" type="email" name="email_address" 
+                    required/>
+
+                <br />
+                </br />
+
+                <label for="password"> Password: </label>
+                <input class="w3-input" type="password" name="password" 
+                    minlength="8" required/>
+
+                <br />
+                <br />
+
+                <button class="w3-button w3-center w3-green" type="submit" 
+                    onclick="return logInMember()">Log In</button>
+
+                <button class="w3-button w3-center w3-blue" 
+                    onclick="return displayForm('registration_form')">
+                    ... or Sign Up for a New Account</button>
+
+            </form>
+
+            <!-- ... or a registration form. -->
+            <form id="registration_form" method="post" 
+                class="w3-padding-large w3-left"
+                onsubmit="return handleRegistrationForm()">
+
+                <h5>
+                    Please provide us with the following information to set 
+                    up your profile:
+
+                    <br>
+                    <br>
+
+                </h5>
+            
+                <label for="university"> University: </label>
+
+                <br/>
+                
+                <select class="w3-input" name="university" id="university" />
+                    <option value="null"></option>
+                    <option value="Princeton">Princeton</option>
+                    <option value="Columbia">Columbia</option>
+                    <option value="Yale">Yale</option>
+                    <option value="Harvard">Harvard</option>
+                    <option value="Dartmouth">Dartmouth</option>
+                    <option value="Brown">Brown</option>
+                    <option value="Penn">Penn</option>
+                    <option value="Cornell">Cornell</option>
+                </select>
+                
+                <br />
+                <br />
+            
+                <label for="first_name"> First Name (Required): </label>
+                <input class="w3-input" type="text" name="first_name" 
+                    id="first_name" required/>
+
+                <br />
+            
+                <label for="last_name"> Last Name (Required): </label>
+                <input class="w3-input" type="text" name="last_name" 
+                    id="last_name" required/>
+
+                <br />
+            
+                <label for="email_address"> Email (Required): </label>
+                <input class="w3-input" type="email" name="email_address" 
+                    id="email_address" required/>
+
+                <br />
+            
+                <label for="password"> Password (Required): </label>
+                <input class="w3-input" type="password" name="password" 
+                    id="password" minlength="8"  required/>
+
+                <br />
+            
+                <p>
+                    <strong>Please select every sport that you play.</strong>
+                </p>
+            
+                Soccer:
+                <select class="w3-input" name="soccer" id="soccer" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                </select>
+                <br /> Frisbee:
+                <select class="w3-input" name="frisbee" id="frisbee" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                </select>
+                <br /> Tennis:
+                <select class="w3-input" name="tennis" id="tennis" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                </select>
+                <br /> Basketball:
+                <select class="w3-input" name="basketball" id="basketball" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                </select>
+                <br /> Running:
+                <select class="w3-input" name="running" id="running" />
+                    <option value=0>Do not play</option>
+                    <option value=1>Beginner</option>
+                    <option value=2>Intermediate</option>
+                    <option value=3>Advanced</option>
+                </select>
+                <br />
+            
+                <p>Would you like to receive push notifications of games 
+                    happening nearby?</p>
+                
+                Yes:
+                <input class="w3-input" type="checkbox" name="yes" 
+                    id="yes_notifications" />
+
+                <br /> 
+                
+                No:
+                <input class="w3-input" type="checkbox" name="no" 
+                    id="no_notifications" />
+
+                <br />
+                <br />
+
+                <button class="w3-button w3-green" 
+                    type="submit">Sign me up!</button>
+
+                <button class="w3-button w3-center w3-blue" 
+                    onclick="return displayForm('login_form')">
+                    ... or go back to LogIn</button>
+            
+            </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- End of Lace Up UI -->
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
 
     <!-- Footer style -->
-    <footer id="document-footer" class="w3-row-padding w3-padding-small w3-container w3-black">
+    <footer id="document-footer" 
+        class="w3-row-padding w3-padding-small w3-container w3-black">
     </footer>
 
     <!-- End of Footer -->
 
+<<<<<<< HEAD
     <script>
         function toggleMenuOnSmallScreens() {
             var x = document.getElementById("navDemo");
@@ -172,6 +394,75 @@
                 x.className = x.className.replace(" w3-show", "");
             }
         }
+=======
+    <script type="text/javascript">
+
+        /*
+         * Log a member into their account.
+         */
+        function logInMember() {
+
+            processFormAndPost("login_form", "/login/", function (results) {
+                if (results.success == true) {
+                    for (const key in results.message) {
+                        localStorage.setItem(key, results.message[key]);
+                    }
+                    window.location = "/home/";
+                } else {
+                    alert(results.message);
+                }
+            });
+
+            // Return false to prevent the page from reloading into a JSON
+            return false;
+        }
+        
+        /*
+         * Process the registration details and log in the user if successful.
+         * This function is the submit destination of 'registration_form'
+         */ 
+        function handleRegistrationForm() {
+            processFormAndPost('registration_form', '/register/', function (results) {
+                if (results["success"] === true) {
+                    for (const key in results.message) {
+                        localStorage.setItem(key, results.message[key]);
+                    }
+                    window.location = "/home/";
+                } else {
+                    alert(results.message);
+                }
+            });
+            return false;
+        }
+
+        /*
+         * @description Toggle which form is currently displayed on the base URL.
+         * 
+         * @param {string} form_id The id of the form that should be displayed.
+         */
+        function displayForm(form_id) {
+            /*
+             * We're toggling between 'registration_form' and 'login_form'.
+             * Only one of them should be in display at any given time.
+             * This method assumes `form_id` exists as expected.
+             */
+
+            if (form_id === "registration_form") {
+                document.getElementById("login_form").style.display = "none";
+                document.getElementById("registration_form").style.display = "block";
+            } else if (form_id === "login_form") {
+                document.getElementById("registration_form").style.display = "none";
+                document.getElementById("login_form").style.display = "block";
+            }
+            
+            // I don't know why this keeps resetting its height...
+            var height = $("#navigation-snippet").height();
+            $("#dummy_padded_div").height(height);
+
+            return false;
+        }
+
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
     </script>
 
 </body>

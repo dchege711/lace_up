@@ -1,14 +1,15 @@
-function loadUserDetails(userDetails) {
-    // Replace the navbar links with acknowledgement of the user loggin in
-    document.getElementById("register_navbar_link").style.display = "none";
-    document.getElementById("login_navbar_link").style.display = "none";
-    document.getElementById("navbar_contents").insertAdjacentHTML(
-        "beforeend",
-        `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
-                    <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` + userDetails.first_name + `</strong></span>`
-    );
+function loadUserDetails() {
 
-    var mainBody = document.getElementById("logged_in_contents");
+    // Fetch the cached details about the user.
+    var userDetails = {};
+    userDetails.first_name = localStorage.getItem("first_name");
+    userDetails.games_joined = localStorage.getItem("games_joined").split(",");
+    userDetails.games_owned = localStorage.getItem("games_owned").split(",");
+    userDetails.orphaned_games = localStorage.getItem("orphaned_games").split(",");
+    userDetails.user_id = localStorage.getItem("user_id");
+    userDetails.session_token = localStorage.getItem("session_token");
+
+    var mainBody = document.getElementById("games_feed");
     mainBody.innerHTML = `<p>These are your games:</p>
                 <div class='w3-container w3-padding' id="user_owned_games"></div>
                 
@@ -53,6 +54,20 @@ function loadUserDetails(userDetails) {
     return false;
 }
 
+/*
+ * Once a user logs in, update the nav bar with acknowledgement that they've
+ * logged in.
+ */ 
+function updateNavBarWithUserDetails() {
+    // Replace the navbar links with acknowledgement of the user loggin in
+    document.getElementById("navbar_contents").insertAdjacentHTML(
+        "beforeend",
+        `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
+            <span class='w3-bar-item w3-orange w3-right'><strong>` 
+            + localStorage.getItem("first_name") + `</strong></span>`
+    );
+}
+
 function makeHttpRequest(method, url, payload, callBack) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -64,35 +79,6 @@ function makeHttpRequest(method, url, payload, callBack) {
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhttp.send(JSON.stringify(payload));
 
-    return false;
-}
-
-function logInMember() {
-
-    var form = document.getElementById("login_form");
-    if (form.reportValidity() === false) {
-        alert("Please fill out the required fields");
-        return;
-    }
-
-    var elements = form.elements;
-    var payload = {};
-
-    for (var i = 0; i < elements.length; i++) {
-        payload[elements[i].name] = elements[i].value;
-    }
-
-    makeHttpRequest("POST", "/login/", payload, function(results) {
-        console.log(results);
-        if (results.success == true) {
-            loadUserDetails(results.message);
-        } else {
-            alert(results.message);
-        }
-    });
-
-    // We need to return false to prevent the page from 
-    // reloading into a JSON object.
     return false;
 }
 
@@ -161,4 +147,13 @@ function refreshGames(userId, get_user_owned) {
     });
 
     return false;
+}
+
+/**
+ * Some divs need to be the same height. This function takes care of that.
+ * It's been duplicated in ProcessForm.js too
+ */
+function resizeElements() {
+    var height = $("#navigation-snippet").height();
+    $("#dummy_padded_div").height(height);
 }

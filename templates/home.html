@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./static/AppActions.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <title>Lace Up Home</title>
+    <style>
+        body,h1,h2,h3,h4,h5,h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,h1,button {
+            font-family: "Montserrat", sans-serif
+        }
+
+        .fa-anchor,.fa-coffee {
+            font-size: 200px
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background-repeat: no-repeat;
+            background-blend-mode: overlay;
+            background-size: 100%;
+        }
+
+        #lace_up_body {
+            flex: 1
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+
+            // Load the footer
+            $("#document-footer").load("./footer.html");
+
+            // Resize elements that should have matching heights
+            $(window).resize(function () {
+                resizeElements();
+            });
+
+            // Load the user's details
+            console.log(localStorage.getItem("first_name"));
+            if (localStorage.getItem("first_name")) {
+                $("#navigation-placeholder").load(
+                    "./navigation.html", updateNavBarWithUserDetails
+                );
+                resizeElements();
+                loadUserDetails();
+            } else {
+                window.location = "/login/";
+            }
+            
+        });
+    </script>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <div id="navigation-placeholder"></div>
+
+    <!-- End of Navigation Bar -->
+
+    <!-- Main part of the Lace Up Application UI -->
+
+    <div class="w3-container w3-white" style="opacity:0.85" id="lace_up_body">
+
+        <!-- Padded element to make sure that the navigation bar never covers
+        the first element that has text. See the script in the header for info -->
+        <div class="w3-container" id="dummy_padded_div" style="height: 50px"></div>
+
+        <!-- First Grid (Search Options)-->
+        <div class="w3-row-padding w3-padding-16 w3-container">
+
+            <div class="w3-container w3-padding-16 w3-half w3-left" id="games_feed"></div>
+
+            <div class="w3-container w3-padding-16 w3-half w3-right" id="stats_feed"></div>
+
+        </div>
+        <!-- End of First Grid -->
+
+    </div>
+
+    <!-- End of Lace Up UI -->
+
+    <!-- Footer style -->
+    <footer id="document-footer" class="w3-row-padding w3-padding-small w3-container w3-black">
+    </footer>
+
+    <!-- End of Footer -->
+
+    <script>
+        function resizeElements() {
+            var height = $("#navigation-snippet").height();
+            $("#dummy_padded_div").height(height);
+        }
+    </script>
+
+</body>
+
+</html>
