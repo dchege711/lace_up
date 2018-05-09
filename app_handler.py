@@ -60,7 +60,8 @@ def return_footer():
     Returns the Page Footer.
 
     """
-        return render_template("footer.html")
+    return render_template("footer.html")
+
 @app.route('/search_games/', methods=["POST"])
 def find_local_games():
     if request.method == "POST":
@@ -97,11 +98,12 @@ def register_new_users():
         successfully completed.
         If `success` is `True`, `message` will have the following keys:
         `user_id`, `first_name`, `games_joined`, `games_owned`,
-        `orphaned_games`, `session_token`.
-        If `success` is `False`, `message` will contain a string explaining
+        `orphaned_games`, `session_token`. If `success` is `False`, 
+        `message` will contain a string explaining
         what went wrong.
 
         """
+
         payload = request.get_json()
 
         successfully_registered_user = user_actions.register_user(payload)["success"]
