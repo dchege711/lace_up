@@ -60,7 +60,8 @@ def return_footer():
     Returns the Page Footer.
 
     """
-        return render_template("footer.html")
+    return render_template("footer.html")
+
 @app.route('/search_games/', methods=["POST"])
 def find_local_games():
     if request.method == "POST":
