@@ -231,6 +231,11 @@ def createGame():
         """
 
         payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
+        print("Payload at create game")
+        print(payload)
 
         if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
             new_game_id = current_user_account.add_game(payload)

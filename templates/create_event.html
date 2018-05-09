@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="./static/ProcessForm.js"></script>
+    <script src="./static/EventForm.js"></script>
     <title>Lace Up</title>
     <style>
         body,
@@ -99,9 +100,9 @@
 
                 <form id="event_form" method="post" onsubmit="return handleEventForm()">
 
-                    <label for="sport"> Sport (Required): </label>
+                    <label for="type"> Sport (Required): </label>
                     <br/>
-                    <select class="w3-input" name="sport" id="sport" />
+                    <select class="w3-input" name="type" id="sport" />
                     <option value="null"></option>
                     <option value="soccer">Soccer</option>
                     <option value="frisbee">Frisbee</option>
@@ -116,30 +117,31 @@
                     <br/>
                     <p>Please check all levels of players you would like at the game:</p>
                     Beginner:
-                    <input class="w3-input" type="checkbox" name="beginner" id="beginner1" />
+                    <input class="w3-input" type="checkbox" name="level" id="beginner1" />
                     <br /> Intermediate:
-                    <input class="w3-input" type="checkbox" name="intermediate" id="intermediate2" />
+                    <input class="w3-input" type="checkbox" name="level" id="intermediate2" />
                     <br /> Advanced:
-                    <input class="w3-input" type="checkbox" name="advanced" id="advanced3" />
+                    <input class="w3-input" type="checkbox" name="level" id="advanced3" />
                     <br />
                     <br />
 
                     <label for="location"> Location (Required): </label>
-                    <input class="w3-input" type="text" name="location" id="location" />
+                    <input class="w3-input" type="text" name="location" id="location" required/>
                     <br />
                     <br />
 
 
-                    <label for="date">Game Date (Required):</label><input type="date" name="date" /><br />          <label for="time"> Game Time (Required):</label><input type="time" name="time" />
+                    <label for="date">Game Date (Required):</label><input type="date" name="date" required/><br />
+                    <label for="time"> Game Time (Required):</label><input type="time" name="time" />
                     <br />
                     <br />
 
                     <label for="numPlayers"> Number of players needed for game (Required): </label>
-                    <input class="w3-input" type="text" name="numPlayers" id="numPlayers" />
+                    <input class="w3-input" type="text" name="numPlayers" id="numPlayers" required/>
                     <br />
                     <br />
                     <br />
-                    <button class="w3-button w3-blue" type="submit">Register</button>
+                    <button class="w3-button w3-blue" type="submit">Create Game!</button>
 
                 </form>
 
@@ -147,10 +149,15 @@
 
             <script>
                 function handleEventForm() {
-                    eventForm('event_form', '/creategame/', function(results) {
-                        console.log(results);
-                        alert(results["messageGame"]);
-                        if (results["success"] === true) window.location = "/login/"
+                    eventFormAndPost('event_form', '/creategame/', function(results) {
+                        if (results["success"] === true) {
+                            for (const key in results.message) {
+                                localStorage.setItem(key, results.messageGame[key]);
+                            }
+                            window.location = "/home/";
+                        } else {
+                            alert(results.messageGame);
+                        }
                     });
                     return false;
                 }
