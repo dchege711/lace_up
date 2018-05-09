@@ -2,7 +2,7 @@
 user_actions.py
 
 Supports user related actions such as `is_in_db`, `get_user`,
-`get_games`, `update_user`, `update_user_append`, 
+`get_games`, `update_user`, `update_user_append`,
 `delete_user`, `register_user`.
 
 """
@@ -38,7 +38,7 @@ def is_in_db(key_val_pair):
 
 def register_user(new_user_info):
     """
-    Register a new user. 
+    Register a new user.
 
     @param `new_user_info` (JSON): The registration details of the
     new user. Expected keys: `email_address`, `password`.
@@ -86,11 +86,11 @@ def register_user(new_user_info):
 
     new_user_account_info = {
         "email_address": new_user_info["email_address"],
-        "first_name": new_user_info["first_name"], 
+        "first_name": new_user_info["first_name"],
         "last_name": new_user_info["last_name"],
         "username": username, "salt": salt, "hash": hashed_pw,
         "validation_url": validation_url, "already_validated": False,
-        "signup_time": datetime.today().timestamp(), 
+        "signup_time": datetime.today().timestamp(),
         "university": new_user_info["university"],
         "user_id": new_user_id, "games_joined": [],
         "games_owned": [], "orphaned_games": []
@@ -116,7 +116,7 @@ def ninja_update_user_append(new_user_info):
 
     """
     assert "user_id" in new_user_info, "`user_id` should have been specified"
-    
+
     allowed_fields = {"orphaned_games", "already_validated"}
 
     user_id = new_user_info.pop("user_id")
@@ -167,12 +167,12 @@ class sport_together_user():
             session_token = self._create_session_token()
             for key in session_token:
                 self.account[key] = session_token[key]
-    
+
     def _authenticate_user(self, password):
         """
         Authenticate a user who is trying to log in.
 
-        @param `submitted_credentials` (JSON): Expected keys: 
+        @param `submitted_credentials` (JSON): Expected keys:
         `email_address_or_username`, `password`.
 
         @return (bool): (JSON) if user was successfully authenticated,
@@ -212,13 +212,13 @@ class sport_together_user():
         `games_joined`, `orphaned_games`.
 
         """
-        
+
         if self.account is None:
             return {
-                "games_owned": None, 
+                "games_owned": None,
                 "games_joined": None, "orphaned_games": None
             }
-        
+
         return {
             "games_owned": game_actions.get_games(self.account["games_owned"]),
             "games_joined": game_actions.get_games(self.account["games_joined"]),
@@ -230,7 +230,7 @@ class sport_together_user():
         Create a token for use in the current user session. This token expires
         after a set time.
 
-        @returns (JSON): Empty JSON if user is not authenticated. Otherwise, 
+        @returns (JSON): Empty JSON if user is not authenticated. Otherwise,
         the keys include `token`, `expiry` and `user_id`.
 
         """
@@ -249,10 +249,10 @@ class sport_together_user():
 
     def return_user_info(self, keys_to_use=None):
         """
-        Return relevant account information. 
+        Return relevant account information.
 
         @param `keys_to_use` (Iterable): The keys (and their associated
-        values) that need to be returned. Useful for trimming the amount 
+        values) that need to be returned. Useful for trimming the amount
         of information sent back and forth.
 
         @return (JSON) if successful, `None` if unsuccessful.
@@ -264,10 +264,10 @@ class sport_together_user():
 
         if keys_to_use == None:
             keys_to_use = [
-                "user_id", "first_name", "games_joined", "games_owned", 
-                "orphaned_games", "session_token"
+                "user_id", "first_name", "games_joined", "games_owned",
+                "orphaned_games", "session_token", "university", "soccer", "running", "basketball", "frisbee"
             ]
-        
+
         user_info_payload = {}
         for key in keys_to_use:
             user_info_payload[key] = self.account[key]
@@ -278,7 +278,7 @@ class sport_together_user():
         """
         Delete the user's account from Sport Together.
 
-        @returns (bool): `True` if the user's account was deleted, 
+        @returns (bool): `True` if the user's account was deleted,
         `False` otherwise
 
         """
@@ -290,7 +290,7 @@ class sport_together_user():
 
         for game_id in self.account["games_owned"]:
             self.withdraw_from_game(game_id)
-        
+
         delete_result = users_db.delete(self.identifier_key_val_pair)
 
         if delete_result["user_id"] == self.account["user_id"]:
@@ -313,7 +313,7 @@ class sport_together_user():
         """
         assert "user_id" in new_user_info, "`user_id` should have been specified"
         assert new_user_info["user_id"] == self.account["user_id"]
-        
+
         new_user_info.pop("user_id")
 
         for key in new_user_info:
@@ -347,7 +347,7 @@ class sport_together_user():
         @return (JSON): Contains the key `user_info` that is `None`
         only if the update wasn't successful.
 
-        @warning: This method overwrites existing fields. Use 
+        @warning: This method overwrites existing fields. Use
         `user_actions.update_user_append(new_user_info)` if you wish
         to append.
 
@@ -363,7 +363,7 @@ class sport_together_user():
             self._refresh()
             return self.return_user_info()
         else:
-            return None  
+            return None
 
     def add_game(self, game_info):
         """
@@ -374,7 +374,7 @@ class sport_together_user():
         game_info (dict)    Expected keys: type, location, "time"
 
         return(s):
-        (int) The id of the inserted game, or NoneType if the 
+        (int) The id of the inserted game, or NoneType if the
         game wasn't successfully inserted into the database.
 
         """
@@ -415,7 +415,7 @@ class sport_together_user():
             return game_id
         else:
             return None
-    
+
     def join_existing_game(self, game_id):
         """
         Join an already existing game.
@@ -474,8 +474,7 @@ def main():
         "email_address": "unique1@gmail.com",
         "password": "this_is_long_enough",
     }
-    print(register_user(new_user))  
+    print(register_user(new_user))
 
 if __name__ == "__main__":
-    main()    
-    
+    main()

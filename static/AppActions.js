@@ -8,16 +8,25 @@ function loadUserDetails() {
     userDetails.orphaned_games = localStorage.getItem("orphaned_games").split(",");
     userDetails.user_id = localStorage.getItem("user_id");
     userDetails.session_token = localStorage.getItem("session_token");
+    userDetails.university = localStorage.getItem("university");
+    userDetails.soccer = localStorage.getItem("soccer");
+    userDetails.running = localStorage.getItem("running");
+    userDetails.frisbee = localStorage.getItem("frisbee");
+    userDetails.basketball = localStorage.getItem("basketball");
 
     var mainBody = document.getElementById("games_feed");
     mainBody.innerHTML = `<p>These are your games:</p>
                 <div class='w3-container w3-padding' id="user_owned_games"></div>
-                
+
                 <hr><p>You're also joining these games..</p>
                 <div class='w3-container w3-padding' id="user_joined_games"></div>
                 `;
+    var mainBody = document.getElementById("explore_games");
+    mainBody.innerHTML = `<p>These are games that might interest you:</p>
+                <div class='w3-container w3-padding' id="all_local_games"></div>
+                `;
 
-    // Keys: time, date, location, type, game_id, game_owner_id, 
+    // Keys: time, date, location, type, game_id, game_owner_id,
     // game_owner_first_name, game_attendees, game_attendees_first_names
 
     makeHttpRequest("POST", "/read_games/", { "user_id": userDetails.user_id }, function (results) {
@@ -29,8 +38,8 @@ function loadUserDetails() {
                 "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
                 " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
                 "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
-                " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" + 
-                gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location + 
+                " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
+                gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
                 "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
                 gameInfo.game_attendees_first_names + "</p></div></div>"
             );
@@ -54,10 +63,51 @@ function loadUserDetails() {
     return false;
 }
 
+
+function loadLocalGames() {
+    console.log(localStorage.getItem("university"));
+
+    // Fetch the cached details about the user.
+    var localGames = {};
+
+    var mainBody = document.getElementById("explore_games");
+    mainBody.innerHTML = `<p>These are games that might interest you:</p>
+                <div class='w3-container w3-padding' id="all_local_games"></div>
+                `;
+
+    // Keys: time, date, location, type, game_id, game_owner_id,
+    // game_owner_first_name, game_attendees, game_attendees_first_names
+
+    makeHttpRequest("POST", "/search_games/", { "location": localStorage.getItem("university") }, function (results) {
+        var gameInfo;
+        console.log(results);
+        var tableElement = document.getElementById("all_local_games");
+        for (let i = 0; i < results.message.length; i++) {
+            gameInfo = results.message[i];
+            console.log(gameInfo);
+            tableElement.insertAdjacentHTML(
+                "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
+                " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
+                "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
+                " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
+                gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
+                "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
+                gameInfo.game_attendees_first_names + "</p></div></div>"
+            );
+        }
+    });
+
+    return false;
+}
+
+
+
+
+
 /*
  * Once a user logs in, update the nav bar with acknowledgement that they've
  * logged in.
- */ 
+ */
 function updateNavBarWithUserDetails() {
     // Replace the navbar links with acknowledgement of the user loggin in
     document.getElementById("register_navbar_link").style.display = "none";
@@ -65,7 +115,7 @@ function updateNavBarWithUserDetails() {
     document.getElementById("navbar_contents").insertAdjacentHTML(
         "beforeend",
         `<a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hover-white w3-black w3-right">Log Out</a>
-            <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as ` 
+            <span class='w3-bar-item w3-orange w3-right'><strong>Logged in as `
             + localStorage.getItem("first_name") + `</strong></span>`
     );
 }
@@ -110,7 +160,7 @@ function logInMember() {
         }
     });
 
-    // We need to return false to prevent the page from 
+    // We need to return false to prevent the page from
     // reloading into a JSON object.
     return false;
 }
@@ -122,7 +172,7 @@ function editGame(gameID) {
     formElement.innerHTML = `
         <p id="game_to_be_changed_id" style={"display":"none"}></p>
         <p id="game_to_be_changed_owner_id" style={"display": "none"}></p>
-        
+
         <label for="origin">Time:</label>
         <input class="w3-input" type="text" name="origin" id="game_to_be_changed_origin" disabled/>
         <br />
@@ -130,7 +180,7 @@ function editGame(gameID) {
         <label for="destination">Location:</label>
         <input class="w3-input" type="text" name="location" id="game_to_be_changed_location" disabled/>
         <br />
-        
+
         <button class="w3-button w3-green" type="submit" onclick="return saveGame()">Save Changes</button>
     `
     makeHttpRequest("POST", "/read_games/", { "game_ids": [gameID] }, function (results) {

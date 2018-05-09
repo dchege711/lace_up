@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="./static/AppActions.js"></script>
+    <script src="./static/tablinks.js"></script>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <title>Lace Up Home</title>
     <style>
@@ -60,8 +61,6 @@
             } else {
                 window.location = "/login/";
             }
-            
-            
         });
     </script>
 </head>
@@ -71,8 +70,6 @@
     <!-- Navigation Bar -->
 
     <div id="navigation-placeholder"></div>
-
-    <!-- End of Navigation Bar -->
 
     <!-- Main part of the Lace Up Application UI -->
 
@@ -84,9 +81,15 @@
 
         <!-- First Grid (Search Options)-->
         <div class="w3-row-padding w3-padding-16 w3-container">
+            <!-- Tabs -->
+            <div class="tab">
+              <button class="tablinks" onclick="tablinks(event, 'games_feed')">Your games</button>
+              <button class="tablinks" onclick="tablinks(event, 'explore_games');loadLocalGames();">Explore games</button>
+
+            </div>
 
             <div class="w3-container w3-padding-16 w3-half w3-left" id="games_feed"></div>
-
+            <div class="w3-container w3-padding-16 w3-half w3-left" id="explore_games"></div>
             <div class="w3-container w3-padding-16 w3-half w3-right" id="stats_feed"></div>
 
         </div>
