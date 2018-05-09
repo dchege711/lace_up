@@ -34,28 +34,43 @@ function loadUserDetails() {
         var tableElement = document.getElementById("user_owned_games");
         for (let i = 0; i < userDetails.games_owned.length; i++) {
             gameInfo = results.games_owned[i];
+            var owned_game_members
+            if (gameInfo.game_attendees_first_names === undefined) {
+              owned_game_members = "No players have joined yet"
+            }
+            else {
+              owned_game_members = gameInfo.game_attendees_first_names.join(", ")
+            }
+
             tableElement.insertAdjacentHTML(
                 "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
                 " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
                 "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
-                "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
-                gameInfo.game_attendees_first_names + "</p></div></div>"
+                "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
+                owned_game_members + "</p></div></div>"
             );
         }
 
         tableElement = document.getElementById("user_joined_games");
         for (let i = 0; i < userDetails.games_joined.length; i++) {
             gameInfo = results.games_joined[i];
+            var joined_game_members
+            if (gameInfo.game_attendees_first_names === undefined) {
+              joined_game_members = "No players have joined yet"
+            }
+            else {
+              joined_game_members = gameInfo.game_attendees_first_names.join(", ")
+            }
             tableElement.insertAdjacentHTML(
                 "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
                 " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
                 "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + ". @" + gameInfo.location +
-                "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
-                gameInfo.game_attendees_first_names + "</p></div></div>"
+                "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
+                joined_game_members + "</p></div></div>"
             );
         }
     });
@@ -84,6 +99,13 @@ function loadLocalGames() {
         var tableElement = document.getElementById("all_local_games");
         for (let i = 0; i < results.message.length; i++) {
             gameInfo = results.message[i];
+            var local_game_members
+            if (gameInfo.game_attendees_first_names === undefined) {
+              local_game_members = "No players have joined yet"
+            }
+            else {
+              local_game_members = gameInfo.game_attendees_first_names.join(", ")
+            }
             console.log(gameInfo);
             tableElement.insertAdjacentHTML(
                 "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
@@ -91,8 +113,8 @@ function loadLocalGames() {
                 "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
-                "<hr>" + gameInfo.game_owner_first_name + "[OG]. Others: " +
-                gameInfo.game_attendees_first_names + "</p></div></div>"
+                "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
+                local_game_members + "</p></div></div>"
             );
         }
     });
