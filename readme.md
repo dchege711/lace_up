@@ -11,14 +11,16 @@
 
 :white_check_mark: Maintain a [session](https://www.owasp.org/index.php/Session_Management_Cheat_Sheet) once the user logs in or registers. This enables us to load other URLs e.g. `lace-up/account/` without requiring a second login.
 
-:soon: Clicking on the logo shouldn't log the user out. Take them to `/lace-up/home/`. Clean up `/lace-up/`, the home URL. It currently shows stuff from Tiger Rides. (Chege is working on this)
+:white_check_mark: Clicking on the logo shouldn't log the user out. Take them to `/lace-up/home/`. Clean up `/lace-up/`, the home URL. It currently shows stuff from Tiger Rides.
 
-:soon: Allow users to edit games that they've already created `/lace-up/<GAME_ID>/`.
+:soon: Manage session data. When a user logs out. Clean up after them. (Chege is working on this)
 
-:soon: Allow users to create new events at `/lace-up/create/`.
+:soon: Allow users to edit games that they've already created `/lace-up/<GAME_ID>/`. (Alex & Ally are working on this)
 
-:soon: Filter and recommended games through the user's home feed at `/lace-up/home/`.
+:soon: Allow users to create new events at `/lace-up/create/`. (Alex & Ally are working on this)
 
-:soon: Prepare and deliver the user's stats.
+:soon: Filter and recommended games through the user's home feed at `/lace-up/home/`. (Komron is working on this)
 
-:soon: Design the `/lace-up/home/`. Split the home page to show games on one half and stats on the other. Wire up links to relevant pages e.g. `/lace-up/account/`
+:soon: Prepare and deliver the user's stats. (August is working on this)
+
+:soon: Design the `/lace-up/home/`. Split the home page to show games on one half and stats on the other. Wire up links to relevant pages e.g. `/lace-up/account/` (Komron is working on this)
