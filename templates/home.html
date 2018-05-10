@@ -111,6 +111,51 @@
             var height = $("#navigation-snippet").height();
             $("#dummy_padded_div").height(height);
         }
+        function editGame(gameId) {
+                var gameIdAsNum = parseInt(gameId, 10);
+                var elementToBeModified = document.getElementById("logged_in_contents");
+                elementToBeModified.insertAdjacentHTML("afterbegin", "<form id='game_to_be_changed'></form>");
+                var formElement = document.getElementById("game_to_be_changed");
+                formElement.innerHTML = `
+
+                    <p id="game_to_be_changed_id" style={"display":"none"}></p>
+                    <p id="game_to_be_changed_owner_id" style={"display": "none"}></p>
+
+                    <label for="type">Type:</label>
+                    <input class="w3-input" type="text" name="type" id="game_to_be_changed_type" disabled/>
+                    <br />
+
+                    <label for="location">Location:</label>
+                    <input class="w3-input" type="text" name="location" id="trip_to_be_changed_location" disabled/>
+                    <br />
+
+                    <label for="time">Time:</label>
+                    <input class="w3-input" type="time" name="time" id="game_to_be_changed_time" />
+                    <br />
+
+                    <button class="w3-button w3-green" type="submit" onclick="return saveGame()">Save Changes</button>
+                `
+        function saveGame() {
+                var formElements = document.getElementById("game_to_be_changed").elements;
+                var payload = {};
+                for (var i = 0; i < formElements.length; i++) {
+                    payload[formElements[i].name] = formElements[i].value;
+                }
+
+                var gameId = document.getElementById("game_to_be_changed_owner_id").value;
+                payload["game_Id"] = document.getElementById("game_to_be_changed_id").value;
+                payload["game_owner_id"] = userId;
+                delete payload[""];
+
+                makeHttpRequest("POST", "/update_game/", payload, function(results) {
+                    document.getElementById("game_to_be_changed").style.display = "none";
+                    if (results["game_info"] !== false) {
+                        refreshTrips(userId, true);
+                    }
+                });
+
+                return false;
+                }
     </script>
 
 </body>

@@ -111,10 +111,11 @@ function loadLocalGames() {
                 "beforeend", "<div class='w3-card-4 w3-leftbar w3-border-blue w3-padding-small w3-margin" +
                 " w3-border-bottom w3-hover-border-green'><div class='w3-container'>" +
                 "<img src='/static/img/" + gameInfo.type + "_icon.svg' class='w3-left'" +
+
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
                 "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
-                local_game_members + "</p></div></div>"
+                local_game_members + "</p></div><div><button class='w3-button' onClick='return editGame('" + gameInfo.game_id + "')'>Edit game</button></div></div>"
             );
         }
     });

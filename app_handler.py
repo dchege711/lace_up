@@ -115,10 +115,7 @@ def register_new_users():
             return jsonify({
                 "success": True,
                 "message": current_user_account.return_user_info(
-                    keys_to_use=[
-                    "user_id", "first_name", "games_joined", "games_owned",
-                    "orphaned_games", "session_token"
-                ])
+                    )
             })
         else:
             return jsonify({
@@ -176,10 +173,7 @@ def handle_login():
                 return jsonify({
                     "success": True,
                     "message": current_user_account.return_user_info(
-                        keys_to_use=[
-                            "user_id", "first_name", "games_joined", "games_owned",
-                            "orphaned_games", "session_token"
-                        ])
+                        )
                 })
 
 @app.route('/read_games/', methods=["POST"])
@@ -209,7 +203,7 @@ def read_trips():
             return {}
 
 @app.route("/update_game/", methods=["POST"])
-def update_trip():
+def update_game():
     if request.method == "POST":
         payload = request.get_json()
         print("Payload:")
