@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request, render_template, send_file
+from flask import Flask, jsonify, make_response, request, render_template, send_file, url_for, redirect
 from flask_cors import CORS
 import os
 from pprint import pprint
@@ -229,6 +229,54 @@ def serve_home_page():
 
 #_______________________________________________________________________________
 
+@app.route('/creategame/', methods=["GET","POST"])
+def createGame():
+    global current_user_account
+
+    if request.method == "GET":
+        """
+        Show the page necessary for a user to create a game.
+
+        """
+        return render_template("create_event.html")
+
+    elif request.method == "POST":
+        """
+        Process the information that was entered on the event form. 
+        Return whether the event creation was successful or not.
+
+        """
+
+        payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
+        print("Payload at create game")
+        print(payload)
+
+        if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
+            new_game_id = current_user_account.add_game(payload)
+        else:
+            new_game_id = None
+            return jsonify({
+                "success": False,
+                "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
+            })
+        
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+
+        
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
 @app.errorhandler(404)
 def notFoundError(error):
     return "Page Not Found", 404
@@ -239,3 +287,4 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 #_______________________________________________________________________________
+
