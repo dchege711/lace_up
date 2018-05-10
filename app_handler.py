@@ -115,11 +115,7 @@ def register_new_users():
 
             return jsonify({
                 "success": True,
-                "message": current_user_account.return_user_info(
-                    keys_to_use=[
-                    "user_id", "first_name", "games_joined", "games_owned",
-                    "orphaned_games", "session_token"
-                ])
+                "message": current_user_account.return_user_info()
             })
         else:
             return jsonify({
@@ -176,11 +172,7 @@ def handle_login():
             else:
                 return jsonify({
                     "success": True,
-                    "message": current_user_account.return_user_info(
-                        keys_to_use=[
-                            "user_id", "first_name", "games_joined", "games_owned",
-                            "orphaned_games", "session_token"
-                        ])
+                    "message": current_user_account.return_user_info()
                 })
 
 @app.route('/read_games/', methods=["POST"])
