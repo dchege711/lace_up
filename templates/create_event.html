@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="./static/ProcessForm.js"></script>
+    <script src="./static/AppActions.js"></script>
     <script src="./static/EventForm.js"></script>
     <title>Lace Up</title>
     <style>
@@ -75,7 +76,14 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script>
         $(function() {
-            $("#navigation-placeholder").load("./navigation.html");
+            if (localStorage.getItem("first_name")) {
+                $("#navigation-placeholder").load(
+                    "./navigation.html", updateNavBarWithUserDetails
+                );
+                resizeElements();
+            } else {
+                window.location = "/login/";
+            }
         });
         $("#document-footer").load("./footer.html");
     </script>

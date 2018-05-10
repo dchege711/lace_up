@@ -265,8 +265,8 @@ class sport_together_user():
         if keys_to_use == None:
             keys_to_use = [
                 "user_id", "first_name", "games_joined", "games_owned",
-                "orphaned_games", "session_token", "university", "soccer", 
-                "running", "basketball", "frisbee"
+                "orphaned_games", "university", "soccer", "running",
+                "basketball", "frisbee"
             ]
 
         user_info_payload = {}
