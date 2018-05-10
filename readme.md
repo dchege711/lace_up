@@ -15,7 +15,11 @@
 
 :soon: Manage session data. When a user logs out. Clean up after them. (Chege is working on this)
 
+<<<<<<< HEAD
+:soon: Allow users to create new events at `/lace-up/create/`. (Alex is working on this)
+=======
 :soon: Allow users to edit games that they've already created `/lace-up/<GAME_ID>/`. (Alex & Ally are working on this)
+>>>>>>> 2eea602b74fb878eb22396742626d950c7a9a397
 
 :soon: Allow users to create new events at `/lace-up/create/`. (Alex & Ally are working on this)
 

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response, request, render_template, send_file
+from flask import Flask, jsonify, make_response, request, render_template, send_file, url_for, redirect
 from flask_cors import CORS
 import os
 from pprint import pprint
@@ -98,11 +98,12 @@ def register_new_users():
         successfully completed.
         If `success` is `True`, `message` will have the following keys:
         `user_id`, `first_name`, `games_joined`, `games_owned`,
-        `orphaned_games`, `session_token`.
-        If `success` is `False`, `message` will contain a string explaining
+        `orphaned_games`, `session_token`. If `success` is `False`,
+        `message` will contain a string explaining
         what went wrong.
 
         """
+
         payload = request.get_json()
 
         successfully_registered_user = user_actions.register_user(payload)["success"]
@@ -114,8 +115,12 @@ def register_new_users():
 
             return jsonify({
                 "success": True,
+<<<<<<< HEAD
                 "message": current_user_account.return_user_info(
                     )
+=======
+                "message": current_user_account.return_user_info()
+>>>>>>> 0684ebbf0c45f0cb7332de7b5f69700b55cf2edf
             })
         else:
             return jsonify({
@@ -172,8 +177,7 @@ def handle_login():
             else:
                 return jsonify({
                     "success": True,
-                    "message": current_user_account.return_user_info(
-                        )
+                    "message": current_user_account.return_user_info()
                 })
 
 @app.route('/read_games/', methods=["POST"])
@@ -229,6 +233,54 @@ def serve_home_page():
         return render_template("home.html")
 
 #_______________________________________________________________________________
+
+@app.route('/creategame/', methods=["GET","POST"])
+def createGame():
+    global current_user_account
+
+    if request.method == "GET":
+        """
+        Show the page necessary for a user to create a game.
+
+        """
+        return render_template("create_event.html")
+
+    elif request.method == "POST":
+        """
+        Process the information that was entered on the event form.
+        Return whether the event creation was successful or not.
+
+        """
+
+        payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
+        print("Payload at create game")
+        print(payload)
+
+        if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
+            new_game_id = current_user_account.add_game(payload)
+        else:
+            new_game_id = None
+            return jsonify({
+                "success": False,
+                "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
+            })
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
 
 @app.errorhandler(404)
 def notFoundError(error):

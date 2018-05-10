@@ -21,10 +21,10 @@ function loadUserDetails() {
                 <hr><p>You're also joining these games..</p>
                 <div class='w3-container w3-padding' id="user_joined_games"></div>
                 `;
-    var mainBody = document.getElementById("explore_games");
-    mainBody.innerHTML = `<p>These are games that might interest you:</p>
-                <div class='w3-container w3-padding' id="all_local_games"></div>
-                `;
+    // var mainBody = document.getElementById("explore_games");
+    // mainBody.innerHTML = `<p>These are games that might interest you:</p>
+    //             <div class='w3-container w3-padding' id="all_local_games"></div>
+    //             `;
 
     // Keys: time, date, location, type, game_id, game_owner_id,
     // game_owner_first_name, game_attendees, game_attendees_first_names
