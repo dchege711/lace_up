@@ -115,12 +115,7 @@ def register_new_users():
 
             return jsonify({
                 "success": True,
-<<<<<<< HEAD
-                "message": current_user_account.return_user_info(
-                    )
-=======
                 "message": current_user_account.return_user_info()
->>>>>>> 0684ebbf0c45f0cb7332de7b5f69700b55cf2edf
             })
         else:
             return jsonify({
