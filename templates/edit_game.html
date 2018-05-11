@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="./static/ProcessForm.js"></script>
+    <script src="./static/AppActions.js"></script>
+    <script src="./static/EventForm.js"></script>
+    <title>Lace Up</title>
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Lato", sans-serif
+        }
+
+        .w3-bar,
+        h1,
+        button {
+            font-family: "Montserrat", sans-serif
+        }
+
+        .fa-anchor,
+        .fa-coffee {
+            font-size: 200px
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background-color: #E0E0E0;
+        }
+
+        form {
+            border-radius: 5px;
+            background-color: white;
+            align-content: center;
+            min-width: 80%;
+            max-width: 80%;
+            padding: 25px;
+        }
+
+        #tiger_rides_body {
+            flex: 1
+        }
+    </style>
+    <script>
+        // Resize elements that should have matching heights
+        $(document).ready(function() {
+            $(window).resize(function() {
+                var height = $("#navigation-placeholder").height();
+                $("#dummy_padded_div").height(height);
+            });
+            $("#document-footer").load("./footer.html");
+        });
+    </script>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <div id="navigation-placeholder"></div>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        $(function() {
+            if (localStorage.getItem("first_name")) {
+                $("#navigation-placeholder").load(
+                    "./navigation.html", updateNavBarWithUserDetails
+                );
+                resizeElements();
+            } else {
+                window.location = "/login/";
+            }
+        });
+        $("#document-footer").load("./footer.html");
+    </script>
+
+    <!-- End of Navigation Bar -->
+
+    <!-- Main part of the Registration Page -->
+
+    <div class="w3-container w3-padding-large" id="tiger_rides_body">
+
+        <!-- Padded element to make sure that the navigation bar never covers
+        the first element that has text. See the script in the header for info -->
+        <div class="w3-container" id="dummy_padded_div" style="height: 50px"></div>
+
+        <!-- Present a Registration Form-->
+        <div class="w3-container w3-padding-large">
+            <div class="w3-container w3-padding-large" id="registration_form_holder">
+
+                <h5> What do you want to change?
+                    <br>
+                </h5>
+
+                <form id="event_form" method="post" onsubmit="return handleEventForm()">
+
+                    <label for="type"> Sport: </label>
+                    <br/>
+                    <select class="w3-input" name="type" id="sport" />
+                    <option value="null"></option>
+                    <option value="soccer">Soccer</option>
+                    <option value="frisbee">Frisbee</option>
+                    <option value="tennis">Tennis</option>
+                    <option value="basketball">Basketball</option>
+                    <option value="running">Running</option>
+                    </select>
+                    <br />
+                    <br />
+
+                    <label for="level"> Level: </label>
+                    <br/>
+                    <p>Please check all levels of players you would like at the game:</p>
+                    Beginner:
+                    <input class="w3-input" type="checkbox" name="level" id="beginner1" />
+                    <br /> Intermediate:
+                    <input class="w3-input" type="checkbox" name="level" id="intermediate2" />
+                    <br /> Advanced:
+                    <input class="w3-input" type="checkbox" name="level" id="advanced3" />
+                    <br />
+                    <br />
+
+                    <label for="location"> Location (Required): </label>
+                    <input class="w3-input" type="text" name="location" id="location" required/>
+                    <br />
+                    <br />
+
+
+                    <label for="date">Game Date:</label><input type="date" name="date" required/><br />
+                    <label for="time"> Game Time:</label><input type="time" name="time" />
+                    <br />
+                    <br />
+
+                    <label for="numPlayers"> Number of players needed for game:</label>
+                    <input class="w3-input" type="text" name="numPlayers" id="numPlayers" required/>
+                    <br />
+                    <br />
+                    <br />
+                    <button class="w3-button w3-blue" type="submit">Save edits</button>
+
+                </form>
+
+            </div>
+
+            <script>
+                function handleEventForm() {
+                    eventFormAndPost('event_form', '/editgame/', function(results) {
+                        if (results["success"] === true) {
+                            for (const key in results.message) {
+                                localStorage.setItem(key, results.messageGame[key]);
+                            }
+                            window.location = "/home/";
+                        } else {
+                            alert(results.messageGame);
+                        }
+                    });
+                    return false;
+                }
+            </script>
+
+        </div>
+
+        <!-- End of Second Grid-->
+
+    </div>
+
+    <!-- End of Registration Page -->
+
+    <!-- Footer style -->
+    <footer id="document-footer" class="w3-row-padding w3-padding-small w3-container w3-black">
+    </footer>
+
+    <!-- End of Footer -->
+
+</body>
+
+</html>

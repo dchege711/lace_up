@@ -277,6 +277,150 @@ def createGame():
                 "messageGame": "Successful creation of game. We hope you have fun playing!"
             })
 
+@app.route('/joingame/', methods=["GET","POST"])
+def joinGame():
+    global current_user_account
+
+    if request.method == "GET":
+        """
+        Show the page necessary for a user to join a game
+
+        """
+        return render_template("join_game.html")
+
+    elif request.method == "POST":
+        """
+        Process the information that was entered on the event form.
+        Return whether the event creation was successful or not.
+
+        """
+
+        payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
+        print("Payload at create game")
+        print(payload)
+
+        if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
+            new_game_id = current_user_account.add_game(payload)
+        else:
+            new_game_id = None
+            return jsonify({
+                "success": False,
+                "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
+            })
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+@app.route('/editgame/', methods=["GET","POST"])
+def editGame():
+    global current_user_account
+
+    if request.method == "GET":
+        """
+        Show the page necessary for a user to join a game
+
+        """
+        return render_template("edit_game.html")
+
+    elif request.method == "POST":
+        """
+        Process the information that was entered on the event form.
+        Return whether the event creation was successful or not.
+
+        """
+
+        payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
+        print("Payload at create game")
+        print(payload)
+
+        if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
+            new_game_id = current_user_account.add_game(payload)
+        else:
+            new_game_id = None
+            return jsonify({
+                "success": False,
+                "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
+            })
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+@app.route('/editjoinedgame/', methods=["GET","POST"])
+def editjoinedGame():
+    global current_user_account
+
+    if request.method == "GET":
+        """
+        Show the page necessary for a user to join a game
+
+        """
+        return render_template("edit_joined_game.html")
+
+    elif request.method == "POST":
+        """
+        Process the information that was entered on the event form.
+        Return whether the event creation was successful or not.
+
+        """
+
+        payload = request.get_json()
+        if payload is None:
+            payload = request.form
+
+        print("Payload at create game")
+        print(payload)
+
+        if current_user_account is not None and payload["user_id"] == current_user_account.account["user_id"]:
+            new_game_id = current_user_account.add_game(payload)
+        else:
+            new_game_id = None
+            return jsonify({
+                "success": False,
+                "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
+            })
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
+
+
+        if new_game_id is not None:
+            return jsonify({
+                "success": True,
+                "messageGame": "Successful creation of game. We hope you have fun playing!"
+            })
+
 @app.errorhandler(404)
 def notFoundError(error):
     return "Page Not Found", 404

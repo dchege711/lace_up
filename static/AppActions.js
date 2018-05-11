@@ -49,7 +49,8 @@ function loadUserDetails() {
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
                 "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
-                owned_game_members + "</p></div></div>"
+                owned_game_members + "</p></div><div><button class='w3-button' onClick= window.location='/editgame/' >Edit game</button></div></div>"
+
             );
         }
 
@@ -70,7 +71,7 @@ function loadUserDetails() {
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + ". @" + gameInfo.location +
                 "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
-                joined_game_members + "</p></div></div>"
+                joined_game_members + "</p></div><div><button class='w3-button' onClick= window.location='/editjoinedgame/' >Edit status</button></div></div>"
             );
         }
     });
@@ -115,7 +116,7 @@ function loadLocalGames() {
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + " @" + gameInfo.location +
                 "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
-                local_game_members + "</p></div><div><button class='w3-button' onClick='return editGame('" + gameInfo.game_id + "')'>Edit game</button></div></div>"
+                local_game_members + "</p></div><div><button class='w3-button' onClick= window.location='/joingame/' >Join game</button></div></div>"
             );
         }
     });
