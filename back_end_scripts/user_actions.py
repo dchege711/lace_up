@@ -36,6 +36,40 @@ def is_in_db(key_val_pair):
     else:
         return False
 
+
+def ninja_update_user_append(new_user_info):
+    """
+    Some updates don't require signing in and authenticating a user.
+
+    """
+    assert "user_id" in new_user_info, "`user_id` should have been specified"
+
+    allowed_fields = {"orphaned_games", "already_validated"}
+
+    user_id = new_user_info.pop("user_id")
+    user_account_info = users_db.read({"user_id": user_id})
+
+    for key in new_user_info:
+        if key not in allowed_fields:
+            return None
+        try:
+            user_account_info[key].append(new_user_info[key])
+
+        except KeyError:
+            user_account_info[key] = [new_user_info[key]]
+
+        new_user_info[key] = user_account_info[key]
+
+    update_result = users_db.update(
+        {"user_id": user_id}, new_user_info
+    )
+
+    if update_result.modified_count == 1:
+        return True
+
+    else:
+        return None
+
 def register_user(new_user_info):
     """
     Register a new user.
@@ -109,39 +143,6 @@ def register_user(new_user_info):
         return {
             "success": False, "message": "500 Server Error."
         }
-
-def ninja_update_user_append(new_user_info):
-    """
-    Some updates don't require signing in and authenticating a user.
-
-    """
-    assert "user_id" in new_user_info, "`user_id` should have been specified"
-
-    allowed_fields = {"orphaned_games", "already_validated"}
-
-    user_id = new_user_info.pop("user_id")
-    user_account_info = users_db.read({"user_id": user_id})
-
-    for key in new_user_info:
-        if key not in allowed_fields:
-            return None
-        try:
-            user_account_info[key].append(new_user_info[key])
-
-        except KeyError:
-            user_account_info[key] = [new_user_info[key]]
-
-        new_user_info[key] = user_account_info[key]
-
-    update_result = users_db.update(
-        {"user_id": user_id}, new_user_info
-    )
-
-    if update_result.modified_count == 1:
-        return True
-
-    else:
-        return None
 
         
 class sport_together_user():
