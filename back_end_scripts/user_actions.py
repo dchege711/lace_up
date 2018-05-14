@@ -401,7 +401,6 @@ class sport_together_user():
         game_info["game_id"] = game_id
         game_info["game_owner_id"] = self.account["user_id"]
         game_info["game_owner_first_name"] = self.account["first_name"]
-        # game_info["html_version"] = game_actions.convert_game_info_to_html(game_info)
 
         insert_results = games_db.create(game_info)
 
