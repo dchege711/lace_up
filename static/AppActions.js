@@ -57,7 +57,7 @@ function loadUserDetails() {
         tableElement = document.getElementById("user_joined_games");
         for (let i = 0; i < userDetails.games_joined.length; i++) {
             gameInfo = results.games_joined[i];
-            var joined_game_members
+            var joined_game_members;
             if (gameInfo.game_attendees_first_names === undefined) {
               joined_game_members = "No players have joined yet"
             }
@@ -71,12 +71,23 @@ function loadUserDetails() {
                 " alt='" + gameInfo.type + "' height='50px' width='50px'><p>" +
                 gameInfo.time + ", " + gameInfo.date + ". @" + gameInfo.location +
                 "<hr>" + gameInfo.game_owner_first_name + " [Owner]. Others: " +
-                joined_game_members + "</p></div><div><button class='w3-button' onClick= window.location='/editjoinedgame/' >Edit status</button></div></div>"
+                // joined_game_members + "</p></div><div><button class='w3-button' onClick= window.location='/editjoinedgame/' >Edit status</button></div></div>"
+                joined_game_members + "</p></div><div><button class='w3-button' onClick='editGameDemo('" +  
+                gameInfo.game_id + "," + gameInfo.type + "," + gameInfo.location + "," + gameInfo.date +
+                 "')'></button></div></div>"
             );
         }
     });
 
     return false;
+}
+
+function editGameDemo(game_id, game_type, game_location, game_date) {
+    localStorage.setItem("game_id_being_changed", game_id);
+    localStorage.setItem("game_type_being_changed", game_type);
+    localStorage.setItem("game_location_being_changed", game_location);
+    localStorage.setItem("game_location_being_changed", game_date);
+    window.location = "/editjoinedgame/";
 }
 
 

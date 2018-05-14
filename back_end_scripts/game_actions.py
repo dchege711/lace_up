@@ -118,8 +118,8 @@ def update_game_append(new_game_info):
         except KeyError:
             game_to_modify[key] = [new_game_info[key]]
 
-    game_to_modify["html_version"] = convert_game_info_to_html(
-        game_to_modify)
+    # game_to_modify["html_version"] = convert_game_info_to_html(game_to_modify)
+    
     return _helper_write_changes_to_db(game_to_modify)
 
 def update_game(new_game_info):
@@ -142,7 +142,8 @@ def update_game(new_game_info):
     for key in new_game_info:
         game_to_modify[key] = new_game_info[key]
 
-    game_to_modify["html_version"] = convert_game_info_to_html(game_to_modify)
+    # game_to_modify["html_version"] = convert_game_info_to_html(game_to_modify)
+    
     return _helper_write_changes_to_db(game_to_modify)
 
 def _helper_write_changes_to_db(new_game_info):

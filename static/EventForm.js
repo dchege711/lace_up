@@ -1,23 +1,29 @@
 var requiredFields = {
         "event_form": ["type", "location", "date", "time", "numPlayers"]
     }
-    /**
-     * @description Process the form and send the data to the appropriate url, then execute the callback.
-     *
-     * @param {string} formID The document id of the form element
-     * @param {string} url The url to which the form data should be sent
-     * @param {function} callBack The function to be called on success, takes the response as its parameter.
-     */
+
+var appendInfo = {
+    "event_form": ["game_id_being_changed", "game_type_being_changed"]
+}
+/**
+ * @description Process the form and send the data to the appropriate url, then execute the callback.
+ *
+ * @param {string} formID The document id of the form element
+ * @param {string} url The url to which the form data should be sent
+ * @param {function} callBack The function to be called on success, takes the response as its parameter.
+ */
 
 function eventFormAndPost(formID, url, callBack) {
 
     var form = document.getElementById(formID);
     var elements = form.elements;
 
-    if (form.reportValidity() === false) {
-        alert("Please fill out the required fields.");
-        return;
-    }
+    console.log(elements);
+
+    // if (form.reportValidity() === false) {
+    //     alert("Please fill out the required fields.");
+    //     return;
+    // }
 
     // Send the form to the server for further processing.
     var payload = {};
@@ -25,10 +31,17 @@ function eventFormAndPost(formID, url, callBack) {
         payload[elements[i].name] = elements[i].value;
     }
     delete payload[""];
-    payload.user_id = localStorage.getItem("user_id")
+    payload.user_id = localStorage.getItem("user_id");
 
-    console.log("Payload: ")
-    console.log(payload)
+    // if (formID === "event_form") {
+    //     payload.game_id = localStorage.getItem("game_id_being_changed");
+    //     payload.type = localStorage.getItem("game_type_being_changed");
+    //     payload.location = localStorage.getItem("game_location_being_changed");
+    //     payload.date = localStorage.getItem("game_date_being_changed");
+    // }
+
+    console.log("Payload: ");
+    console.log(payload);
 
     sendHTTPRequest("POST", url, payload, callBack);
 }

@@ -58,6 +58,7 @@
                     "./navigation.html", updateNavBarWithUserDetails
                 );
                 resizeElements();
+                console.log("Called user details");
                 loadUserDetails();
             } else {
                 window.location = "/login/";
@@ -89,9 +90,9 @@
                 <button class="w3-btn w3-orange w3-hover-black" onclick="window.location='/creategame/';"> Create New Game</button> 
             </div>
 
-            <div class="w3-container w3-padding-16 w3-half w3-left" id="games_feed"></div>
-            <div class="w3-container w3-padding-16 w3-half w3-left" id="explore_games"></div>
-            <div class="w3-container w3-padding-16 w3-half w3-right" id="stats_feed"></div>
+            <div class="w3-container w3-padding-16 tablinks" id="games_feed"></div>
+            <div class="w3-container w3-padding-16 tablinks" id="explore_games"></div>
+            <div class="w3-container w3-padding-16 " id="stats_feed"></div>
 
         </div>
         <!-- End of First Grid -->
@@ -135,6 +136,7 @@
 
                     <button class="w3-button w3-green" type="submit" onclick="return saveGame()">Save Changes</button>
                 `
+        }
         function saveGame() {
                 var formElements = document.getElementById("game_to_be_changed").elements;
                 var payload = {};

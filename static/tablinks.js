@@ -3,7 +3,7 @@ function tablinks(evt, explore_local_games) {
     var i, tabcontent, tablinks;
 
     // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("w3-container w3-padding-16 w3-half w3-left");
+    tabcontent = document.getElementsByClassName("w3-container w3-padding-16 tablinks");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }

@@ -13,15 +13,7 @@ import game_actions
 
 app = Flask(__name__)
 
-# Setting this to zero tells Flask to stop cacheing static assets
-# like .js files
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 CORS(app)   # Allow Cross-Origin-Resource-Sharing on all methods
-
-# app_files = {
-#     # "logo_cropped.png": send_file("./static/img/logo/logo_cropped.png", mimetype="image/png"),
-#     "navigation.html": render_template("navigation.html")
-# }
 
 #_______________________________________________________________________________
 
@@ -72,19 +64,12 @@ def find_local_games():
         """
         payload = request.get_json()
         print(payload)
-        # try:
+
         local_games = game_actions.filter_local_games(payload)
         return jsonify({
             "success": True,
             "message": local_games
         })
-        """
-        except:
-            return jsonify({
-                "success": False,
-                "message": "No sport for you"
-            })
-        """
 
 @app.route('/register/', methods=["POST"])
 def register_new_users():
@@ -269,14 +254,6 @@ def createGame():
                 "messageGame": "Successful creation of game. We hope you have fun playing!"
             })
 
-
-
-        if new_game_id is not None:
-            return jsonify({
-                "success": True,
-                "messageGame": "Successful creation of game. We hope you have fun playing!"
-            })
-
 @app.route('/joingame/', methods=["GET","POST"])
 def joinGame():
     global current_user_account
@@ -310,14 +287,6 @@ def joinGame():
                 "success": False,
                 "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
             })
-
-        if new_game_id is not None:
-            return jsonify({
-                "success": True,
-                "messageGame": "Successful creation of game. We hope you have fun playing!"
-            })
-
-
 
         if new_game_id is not None:
             return jsonify({
@@ -365,14 +334,6 @@ def editGame():
                 "messageGame": "Successful creation of game. We hope you have fun playing!"
             })
 
-
-
-        if new_game_id is not None:
-            return jsonify({
-                "success": True,
-                "messageGame": "Successful creation of game. We hope you have fun playing!"
-            })
-
 @app.route('/editjoinedgame/', methods=["GET","POST"])
 def editjoinedGame():
     global current_user_account
@@ -406,14 +367,6 @@ def editjoinedGame():
                 "success": False,
                 "messageGame": "Unsuccessful creation of game. Please try again after a few minutes."
             })
-
-        if new_game_id is not None:
-            return jsonify({
-                "success": True,
-                "messageGame": "Successful creation of game. We hope you have fun playing!"
-            })
-
-
 
         if new_game_id is not None:
             return jsonify({
