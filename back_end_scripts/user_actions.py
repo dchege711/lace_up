@@ -142,6 +142,8 @@ def ninja_update_user_append(new_user_info):
 
     else:
         return None
+
+        
 class sport_together_user():
 
     def __init__(self, identifier_key_val_pair, password):
